@@ -3,4 +3,4 @@
  *
  * @since 1.0
  */
-package me.tozy.spigot.api.command;
+package xyz.tozymc.spigot.api.command;

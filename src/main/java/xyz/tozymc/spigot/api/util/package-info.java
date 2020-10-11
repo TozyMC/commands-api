@@ -3,4 +3,4 @@
  *
  * @since 1.0
  */
-package me.tozy.spigot.api.util;
+package xyz.tozymc.spigot.api.util;

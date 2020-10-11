@@ -1,5 +1,7 @@
-package me.tozy.spigot.api.command;
+package xyz.tozymc.spigot.api.command;
 
+import xyz.tozymc.spigot.api.command.result.CommandResult;
+import xyz.tozymc.spigot.api.command.result.TabResult;
 import org.bukkit.command.CommandSender;
 import org.bukkit.command.ConsoleCommandSender;
 import org.bukkit.entity.Player;
@@ -21,29 +23,29 @@ import java.util.List;
  */
 public abstract class CombinedCommand extends AbstractCommand {
 
-  protected CombinedCommand(@Nullable Command parent, @NotNull String name,
+  public CombinedCommand(@Nullable Command parent, @NotNull String name,
       @NotNull List<String> aliases) {
     super(parent, name, aliases);
   }
 
-  protected CombinedCommand(@Nullable Command parent, @NotNull String name,
+  public CombinedCommand(@Nullable Command parent, @NotNull String name,
       @NotNull String... aliases) {
     super(parent, name, aliases);
   }
 
-  protected CombinedCommand(@NotNull Command parent, @NotNull String name) {
+  public CombinedCommand(@NotNull Command parent, @NotNull String name) {
     super(parent, name);
   }
 
-  protected CombinedCommand(@NotNull String name) {
+  public CombinedCommand(@NotNull String name) {
     super(name);
   }
 
-  protected CombinedCommand(@NotNull String name, @NotNull String... aliases) {
+  public CombinedCommand(@NotNull String name, @NotNull String... aliases) {
     super(name, aliases);
   }
 
-  protected CombinedCommand(@NotNull String name,
+  public CombinedCommand(@NotNull String name,
       @NotNull List<String> aliases) {
     super(name, aliases);
   }
@@ -68,7 +70,7 @@ public abstract class CombinedCommand extends AbstractCommand {
    * the command executor
    */
   @NotNull
-  public abstract List<String> onTab(@NotNull CommandSender sender, @NotNull String[] params);
+  public abstract TabResult onTab(@NotNull CommandSender sender, @NotNull String[] params);
 
   @Override
   public @NotNull
@@ -85,13 +87,13 @@ public abstract class CombinedCommand extends AbstractCommand {
 
   @Override
   public @NotNull
-  List<String> onTab(@NotNull Player player, @NotNull String[] params) {
+  TabResult onTab(@NotNull Player player, @NotNull String[] params) {
     return onTab(((CommandSender) player), params);
   }
 
   @Override
   public @NotNull
-  List<String> onConsoleTab(@NotNull ConsoleCommandSender console,
+  TabResult onConsoleTab(@NotNull ConsoleCommandSender console,
       @NotNull String[] params) {
     return onTab(console, params);
   }

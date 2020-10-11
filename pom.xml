@@ -4,7 +4,7 @@
   xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
   <modelVersion>4.0.0</modelVersion>
 
-  <groupId>me.tozy.spigot</groupId>
+  <groupId>xyz.tozymc.spigot</groupId>
   <artifactId>commands-api</artifactId>
   <version>1.0</version>
   <packaging>jar</packaging>
@@ -71,7 +71,7 @@
             <id>bundle-sources</id>
             <phase>package</phase>
             <goals>
-              <goal>jar-no-fork</goal>
+              <goal>jar</goal>
             </goals>
           </execution>
         </executions>
@@ -82,19 +82,32 @@
         <version>3.2.0</version>
         <executions>
           <execution>
+            <id>javadoc</id>
             <goals>
-              <goal>javadoc-no-fork</goal>
+              <goal>javadoc</goal>
             </goals>
+            <phase>site</phase>
+          </execution>
+          <execution>
+            <goals>
+              <goal>jar</goal>
+            </goals>
+            <phase>package</phase>
           </execution>
         </executions>
         <configuration>
+          <charset>utf-8</charset>
           <source>${java.version}</source>
           <windowtitle>commands-api ${project.version}</windowtitle>
+          <excludePackageNames>xyz.tozymc.spigot.api.command.handler</excludePackageNames>
           <links>
             <!-- Cannot fetch Spigot-API javadocs so I use Paper-API javadocs instead. -->
             <link>https://papermc.io/javadocs/paper/1.16/</link>
             <link>https://javadoc.io/doc/org.jetbrains/annotations-java5/20.1.0/</link>
           </links>
+          <bottom>Copyright © {currentYear} TozyMC. All rights
+            reserved.
+          </bottom>
         </configuration>
       </plugin>
     </plugins>

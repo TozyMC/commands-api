@@ -1,13 +1,14 @@
-package me.tozy.spigot.api.command;
+package xyz.tozymc.spigot.api.command;
 
-import me.tozy.spigot.api.command.CommandResult.Type;
-import me.tozy.spigot.api.command.util.CommonMessage;
-import me.tozy.spigot.api.util.bukkit.permission.PermissionWrapper;
+import xyz.tozymc.spigot.api.command.result.CommandResult;
+import xyz.tozymc.spigot.api.command.result.CommandResult.Type;
+import xyz.tozymc.spigot.api.command.result.TabResult;
+import xyz.tozymc.spigot.api.command.util.CommonMessage;
+import xyz.tozymc.spigot.api.util.bukkit.permission.PermissionWrapper;
 import org.bukkit.entity.Player;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
-import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -19,29 +20,29 @@ import java.util.List;
  */
 public abstract class ConsoleCommand extends AbstractCommand {
 
-  protected ConsoleCommand(@Nullable Command parent, @NotNull String name,
+  public ConsoleCommand(@Nullable Command parent, @NotNull String name,
       @NotNull List<String> aliases) {
     super(parent, name, aliases);
   }
 
-  protected ConsoleCommand(@Nullable Command parent, @NotNull String name,
+  public ConsoleCommand(@Nullable Command parent, @NotNull String name,
       @NotNull String... aliases) {
     super(parent, name, aliases);
   }
 
-  protected ConsoleCommand(@NotNull Command parent, @NotNull String name) {
+  public ConsoleCommand(@NotNull Command parent, @NotNull String name) {
     super(parent, name);
   }
 
-  protected ConsoleCommand(@NotNull String name) {
+  public ConsoleCommand(@NotNull String name) {
     super(name);
   }
 
-  protected ConsoleCommand(@NotNull String name, @NotNull String... aliases) {
+  public ConsoleCommand(@NotNull String name, @NotNull String... aliases) {
     super(name, aliases);
   }
 
-  protected ConsoleCommand(@NotNull String name, @NotNull List<String> aliases) {
+  public ConsoleCommand(@NotNull String name, @NotNull List<String> aliases) {
     super(name, aliases);
   }
 
@@ -53,8 +54,8 @@ public abstract class ConsoleCommand extends AbstractCommand {
 
   @NotNull
   @Override
-  public List<String> onTab(@NotNull Player player, @NotNull String[] params) {
-    return new ArrayList<>();
+  public TabResult onTab(@NotNull Player player, @NotNull String[] params) {
+    return TabResult.empty();
   }
 
   @NotNull

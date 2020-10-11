@@ -1,12 +1,13 @@
-package me.tozy.spigot.api.command;
+package xyz.tozymc.spigot.api.command;
 
-import me.tozy.spigot.api.command.CommandResult.Type;
-import me.tozy.spigot.api.command.util.CommonMessage;
+import xyz.tozymc.spigot.api.command.result.CommandResult;
+import xyz.tozymc.spigot.api.command.result.CommandResult.Type;
+import xyz.tozymc.spigot.api.command.result.TabResult;
+import xyz.tozymc.spigot.api.command.util.CommonMessage;
 import org.bukkit.command.ConsoleCommandSender;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
-import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -18,30 +19,30 @@ import java.util.List;
  */
 public abstract class PlayerCommand extends AbstractCommand {
 
-  protected PlayerCommand(@Nullable Command parent, @NotNull String name,
+  public PlayerCommand(@Nullable Command parent, @NotNull String name,
       @NotNull List<String> aliases) {
     super(parent, name, aliases);
   }
 
-  protected PlayerCommand(@Nullable Command parent, @NotNull String name,
+  public PlayerCommand(@Nullable Command parent, @NotNull String name,
       @NotNull String... aliases) {
     super(parent, name, aliases);
   }
 
-  protected PlayerCommand(@NotNull Command parent, @NotNull String name) {
+  public PlayerCommand(@NotNull Command parent, @NotNull String name) {
     super(parent, name);
   }
 
-  protected PlayerCommand(@NotNull String name) {
+  public PlayerCommand(@NotNull String name) {
     super(name);
   }
 
-  protected PlayerCommand(@NotNull String name,
+  public PlayerCommand(@NotNull String name,
       @NotNull String... aliases) {
     super(name, aliases);
   }
 
-  protected PlayerCommand(@NotNull String name, @NotNull List<String> aliases) {
+  public PlayerCommand(@NotNull String name, @NotNull List<String> aliases) {
     super(name, aliases);
   }
 
@@ -54,8 +55,8 @@ public abstract class PlayerCommand extends AbstractCommand {
 
   @Override
   @NotNull
-  public List<String> onConsoleTab(@NotNull ConsoleCommandSender console,
+  public TabResult onConsoleTab(@NotNull ConsoleCommandSender console,
       @NotNull String[] params) {
-    return new ArrayList<>();
+    return TabResult.empty();
   }
 }

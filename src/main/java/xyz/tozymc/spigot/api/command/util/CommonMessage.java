@@ -1,6 +1,10 @@
-package me.tozy.spigot.api.command.util;
+package xyz.tozymc.spigot.api.command.util;
+
+import static xyz.tozymc.spigot.api.util.bukkit.Colors.color;
 
 import org.jetbrains.annotations.Contract;
+import xyz.tozymc.spigot.api.command.Command;
+import xyz.tozymc.spigot.api.util.Arrays;
 
 /**
  * Common messages use in command handler.
@@ -17,6 +21,11 @@ public final class CommonMessage {
 
   @Contract(pure = true)
   private CommonMessage() {
+    color(noPermissions);
+    color(noPermission);
+    color(notConsole);
+    color(notPlayer);
+    color(syntaxUsage);
   }
 
   /**
@@ -35,6 +44,7 @@ public final class CommonMessage {
    * @param noPermissions An array of text
    */
   public static void setNoPermissions(String... noPermissions) {
+    color(noPermissions);
     CommonMessage.noPermissions = noPermissions;
   }
 
@@ -56,7 +66,21 @@ public final class CommonMessage {
    * @param noPermission An array of text
    */
   public static void setNoPermission(String... noPermission) {
+    color(noPermission);
     CommonMessage.noPermission = noPermission;
+  }
+
+  /**
+   * Performs placeholder and returns the no-permission messages has been formatted.
+   *
+   * @param permission The permission string
+   * @return The texts has been formatted permission
+   */
+  public static String[] getNoPermission(String permission) {
+    String[] texts = CommonMessage.noPermission.clone();
+    Arrays.setAll(texts, i -> texts[i].replaceAll("\\{permission}", permission));
+    color(texts);
+    return texts;
   }
 
   /**
@@ -75,6 +99,7 @@ public final class CommonMessage {
    * @param notConsole An array of text
    */
   public static void setNotConsole(String... notConsole) {
+    color(notConsole);
     CommonMessage.notConsole = notConsole;
   }
 
@@ -94,6 +119,7 @@ public final class CommonMessage {
    * @param notPlayer An array of text
    */
   public static void setNotPlayer(String... notPlayer) {
+    color(notPlayer);
     CommonMessage.notPlayer = notPlayer;
   }
 
@@ -119,6 +145,21 @@ public final class CommonMessage {
    * @param syntaxUsage An array of text
    */
   public static void setSyntaxUsage(String... syntaxUsage) {
+    color(syntaxUsage);
     CommonMessage.syntaxUsage = syntaxUsage;
+  }
+
+  /**
+   * Performs placeholder and returns the syntax usage messages has been formatted.
+   *
+   * @param command The command for formatter
+   * @return The texts has been formatted
+   */
+  public static String[] getSyntaxUsage(Command command) {
+    String[] texts = CommonMessage.syntaxUsage;
+    Arrays.setAll(texts, i -> texts[i].replaceAll("\\{syntax}", command.getSyntax()));
+    Arrays.setAll(texts, i -> texts[i].replaceAll("\\{description}", command.getDescription()));
+    color(texts);
+    return texts;
   }
 }

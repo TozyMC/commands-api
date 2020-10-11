@@ -1,7 +1,9 @@
 name: CommandHandler
 version: ${project.version}
-main: me.tozy.spigot.plugin.CommandHandlerPlugin
+main: xyz.tozy.spigot.plugin.CommandHandlerPlugin
 api-version: 1.16
 authors: [ TozyMC ]
 description: Simple way to use command in your spigot plugin.
+commands:
+  handler:
 

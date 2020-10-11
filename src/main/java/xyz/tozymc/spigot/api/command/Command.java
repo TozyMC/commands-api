@@ -1,6 +1,8 @@
-package me.tozy.spigot.api.command;
+package xyz.tozymc.spigot.api.command;
 
-import me.tozy.spigot.api.util.bukkit.permission.PermissionWrapper;
+import xyz.tozymc.spigot.api.command.result.CommandResult;
+import xyz.tozymc.spigot.api.command.result.TabResult;
+import xyz.tozymc.spigot.api.util.bukkit.permission.PermissionWrapper;
 import org.bukkit.command.ConsoleCommandSender;
 import org.bukkit.entity.Player;
 import org.jetbrains.annotations.NotNull;
@@ -53,11 +55,11 @@ public interface Command {
    * @param player Player executed command
    * @param params The parameters pass to the to the command, including final partial parameter to
    *               be completed and command label
-   * @return A List of possible completions for the final argument, or an empty list to default to
-   * the command executor
+   * @return A result contains a list of possible completions for the final argument, or an empty
+   * list to default to the command executor and string to search for.
    */
   @NotNull
-  List<String> onTab(@NotNull Player player, @NotNull String[] params);
+  TabResult onTab(@NotNull Player player, @NotNull String[] params);
 
   /**
    * Requests a list of possible completions for a command parameters.
@@ -67,11 +69,11 @@ public interface Command {
    * @param console Console sender executed command
    * @param params  The parameters pass to the to the command, including final partial parameter to
    *                be completed and command label
-   * @return A List of possible completions for the final argument, or an empty list to default to
-   * the command executor
+   * @return A result contains a list of possible completions for the final argument, or an empty
+   * list to default to the command executor and string to search for.
    */
   @NotNull
-  List<String> onConsoleTab(@NotNull ConsoleCommandSender console,
+  TabResult onConsoleTab(@NotNull ConsoleCommandSender console,
       @NotNull String[] params);
 
   /**

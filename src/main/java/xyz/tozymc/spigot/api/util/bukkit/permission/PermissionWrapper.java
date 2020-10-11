@@ -1,6 +1,6 @@
-package me.tozy.spigot.api.util.bukkit.permission;
+package xyz.tozymc.spigot.api.util.bukkit.permission;
 
-import me.tozy.spigot.api.util.Arrays;
+import xyz.tozymc.spigot.api.util.Arrays;
 import org.bukkit.command.CommandSender;
 import org.bukkit.command.ConsoleCommandSender;
 import org.bukkit.entity.Entity;

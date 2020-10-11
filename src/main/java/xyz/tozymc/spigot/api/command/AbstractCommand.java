@@ -1,6 +1,6 @@
-package me.tozy.spigot.api.command;
+package xyz.tozymc.spigot.api.command;
 
-import me.tozy.spigot.api.util.Lists;
+import xyz.tozymc.spigot.api.util.Lists;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
@@ -32,7 +32,7 @@ public abstract class AbstractCommand implements Command {
    * @param name    Name of this command
    * @param aliases List of aliases
    */
-  protected AbstractCommand(@Nullable Command parent, @NotNull String name,
+  public AbstractCommand(@Nullable Command parent, @NotNull String name,
       @NotNull List<String> aliases) {
     this.parent = parent;
     this.name = name;
@@ -47,7 +47,7 @@ public abstract class AbstractCommand implements Command {
    * @param aliases Array of aliases
    * @see #AbstractCommand(Command, String, List)
    */
-  protected AbstractCommand(@Nullable Command parent, @NotNull String name,
+  public AbstractCommand(@Nullable Command parent, @NotNull String name,
       @NotNull String... aliases) {
     this(parent, name, Lists.newArrayList(aliases));
   }
@@ -59,7 +59,7 @@ public abstract class AbstractCommand implements Command {
    * @param name   Name of this command
    * @see #AbstractCommand(Command, String, List)
    */
-  protected AbstractCommand(@NotNull Command parent, @NotNull String name) {
+  public AbstractCommand(@NotNull Command parent, @NotNull String name) {
     this(parent, name, new ArrayList<>());
   }
 
@@ -68,7 +68,7 @@ public abstract class AbstractCommand implements Command {
    *
    * @param name Name of this command
    */
-  protected AbstractCommand(@NotNull String name) {
+  public AbstractCommand(@NotNull String name) {
     this(null, name, new ArrayList<>());
   }
 
@@ -78,7 +78,7 @@ public abstract class AbstractCommand implements Command {
    * @param name    Name of this command
    * @param aliases Array of aliases
    */
-  protected AbstractCommand(@NotNull String name, @NotNull String... aliases) {
+  public AbstractCommand(@NotNull String name, @NotNull String... aliases) {
     this(null, name, aliases);
   }
 
@@ -88,7 +88,7 @@ public abstract class AbstractCommand implements Command {
    * @param name    Name of this command
    * @param aliases List of aliases
    */
-  protected AbstractCommand(@NotNull String name, @NotNull List<String> aliases) {
+  public AbstractCommand(@NotNull String name, @NotNull List<String> aliases) {
     this(null, name, aliases);
   }
 
