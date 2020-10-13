@@ -8,18 +8,51 @@
   <artifactId>commands-api</artifactId>
   <version>1.0</version>
   <packaging>jar</packaging>
-  <name>CommandHandler</name>
+  <name>commands-api</name>
 
   <description>Simple way to use command in your spigot plugin.</description>
   <url>https://github.com/TozyMC/CommandHandler</url>
 
+  <distributionManagement>
+    <repository>
+      <id>bintray-tozymc-commands-api</id>
+      <name>tozymc-commands-api</name>
+      <url>https://api.bintray.com/maven/tozymc/commands-api/commands-api/;publish=1</url>
+    </repository>
+  </distributionManagement>
+
+  <issueManagement>
+    <system>GitHub Issues</system>
+    <url>https://github.com/TozyMC/commands-api/issues</url>
+  </issueManagement>
+
+  <inceptionYear>2020</inceptionYear>
+
+  <scm>
+    <connection>scm:git:https://github.com/TozyMC/commands-api.git</connection>
+    <developerConnection>scm:git:https://github.com/TozyMC/commands-api.git</developerConnection>
+    <url>https://github.com/TozyMC/commands-api/tree/${pom.scm.tag}</url>
+    <tag>main</tag>
+  </scm>
+
   <developers>
     <developer>
+      <id>tozymc</id>
       <name>TozyMC</name>
-      <email>tozymc@gmail.com</email>
       <url>https://github.com/TozyMC</url>
+      <roles>
+        <role>Owner</role>
+      </roles>
     </developer>
   </developers>
+
+  <licenses>
+    <license>
+      <name>MIT License</name>
+      <url>https://github.com/TozyMC/commands-api/blob/main/LICENSE</url>
+      <distribution>repo</distribution>
+    </license>
+  </licenses>
 
   <properties>
     <java.version>1.8</java.version>
@@ -53,7 +86,7 @@
               <minimizeJar>true</minimizeJar>
               <filters>
                 <filter>
-                  <artifact>org.jetbrains:annotations</artifact>
+                  <artifact>org.jetbrains:annotations-java5</artifact>
                   <excludes>
                     <exclude>META-INF/MANIFEST.MF</exclude>
                   </excludes>
@@ -71,7 +104,7 @@
             <id>bundle-sources</id>
             <phase>package</phase>
             <goals>
-              <goal>jar</goal>
+              <goal>jar-no-fork</goal>
             </goals>
           </execution>
         </executions>
@@ -84,9 +117,9 @@
           <execution>
             <id>javadoc</id>
             <goals>
-              <goal>javadoc</goal>
+              <goal>jar</goal>
             </goals>
-            <phase>site</phase>
+            <phase>package</phase>
           </execution>
         </executions>
         <configuration>
@@ -117,10 +150,6 @@
     <repository>
       <id>spigotmc-repo</id>
       <url>https://hub.spigotmc.org/nexus/content/repositories/snapshots/</url>
-    </repository>
-    <repository>
-      <id>sonatype</id>
-      <url>https://oss.sonatype.org/content/groups/public/</url>
     </repository>
   </repositories>
 
