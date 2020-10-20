@@ -10,14 +10,14 @@
   <packaging>jar</packaging>
   <name>commands-api</name>
 
-  <description>Simple way to use command in your spigot plugin.</description>
+  <description>Command libraries for spigot plugin.</description>
   <url>https://github.com/TozyMC/CommandHandler</url>
 
   <distributionManagement>
     <repository>
-      <id>bintray-tozymc-commands-api</id>
-      <name>tozymc-commands-api</name>
-      <url>https://api.bintray.com/maven/tozymc/commands-api/commands-api/;publish=1</url>
+      <id>bintray-tozymc-public</id>
+      <name>tozymc-public</name>
+      <url>https://api.bintray.com/maven/tozymc/public/commands-api/;publish=1</url>
     </repository>
   </distributionManagement>
 
@@ -31,7 +31,7 @@
   <scm>
     <connection>scm:git:https://github.com/TozyMC/commands-api.git</connection>
     <developerConnection>scm:git:https://github.com/TozyMC/commands-api.git</developerConnection>
-    <url>https://github.com/TozyMC/commands-api/tree/${pom.scm.tag}</url>
+    <url>https://github.com/TozyMC/commands-api/tree/${project.scm.tag}</url>
     <tag>main</tag>
   </scm>
 
@@ -81,12 +81,10 @@
               <goal>shade</goal>
             </goals>
             <configuration>
-              <createDependencyReducedPom>false</createDependencyReducedPom>
               <shadedArtifactAttached>true</shadedArtifactAttached>
-              <minimizeJar>true</minimizeJar>
               <filters>
                 <filter>
-                  <artifact>org.jetbrains:annotations-java5</artifact>
+                  <artifact>*:*</artifact>
                   <excludes>
                     <exclude>META-INF/MANIFEST.MF</exclude>
                   </excludes>
@@ -115,7 +113,7 @@
         <version>3.2.0</version>
         <executions>
           <execution>
-            <id>javadoc</id>
+            <id>attach-javadoc</id>
             <goals>
               <goal>jar</goal>
             </goals>
@@ -125,16 +123,14 @@
         <configuration>
           <charset>utf-8</charset>
           <source>${java.version}</source>
-          <windowtitle>commands-api ${project.version}</windowtitle>
+          <!-- Use for generate with HTML5 in jdk9. If you using jdk8, you can remove this tag. -->
+          <additionalOptions>-html5</additionalOptions>
           <excludePackageNames>xyz.tozymc.spigot.api.command.handler</excludePackageNames>
           <links>
-            <!-- Cannot fetch Spigot-API javadocs so I use Paper-API javadocs instead. -->
-            <link>https://papermc.io/javadocs/paper/1.16/</link>
+            <link>https://tozymc.github.io/javadocs/spigot/1.16/</link>
             <link>https://javadoc.io/doc/org.jetbrains/annotations-java5/20.1.0/</link>
           </links>
-          <bottom>Copyright © {currentYear} TozyMC. All rights
-            reserved.
-          </bottom>
+          <bottom>Copyright © {currentYear} TozyMC. All rights reserved.</bottom>
         </configuration>
       </plugin>
     </plugins>
