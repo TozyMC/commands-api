@@ -33,7 +33,7 @@ import java.util.stream.Collectors;
 public final class CommandController {
 
   private final JavaPlugin plugin;
-  private final CommandHandler commandHandler;
+  private final CommandHandler defaultCommandHandler;
   private final TabHandler tabHandler;
   private final Map<String, Command> rootCommands = new HashMap<>();
   private final Map<Command, List<Command>> commands = new HashMap<>();
@@ -41,7 +41,7 @@ public final class CommandController {
   @Contract(pure = true)
   public CommandController(@NotNull JavaPlugin plugin) {
     this.plugin = plugin;
-    this.commandHandler = new CommandHandler(this);
+    this.defaultCommandHandler = new CommandHandler(this);
     this.tabHandler = new TabHandler(this);
   }
 
@@ -58,9 +58,9 @@ public final class CommandController {
   @NotNull
   public Optional<Command> getCommand(Command root, String name) {
     return commands.get(root)
-        .stream()
-        .filter(command -> command.getName().equalsIgnoreCase(name))
-        .findFirst();
+            .stream()
+            .filter(command -> command.getName().equalsIgnoreCase(name))
+            .findFirst();
   }
 
   @Nullable
@@ -69,15 +69,15 @@ public final class CommandController {
   }
 
   @NotNull
-  @Contract("_ -> param1")
-  private Command registerPluginCommand(@NotNull Command command) {
+  @Contract("_ -> param1") // <-- TODO: I don't know how to edit this Contract attribute
+  private Command registerPluginCommand(@NotNull Command command, @NotNull CommandHandler commandHandler) {
     String name = command.getName();
     rootCommands.put(name, command);
     PluginCommand pluginCmd = Preconditions.checkNotNull(plugin.getCommand(name),
-        "Command %s need register in plugin.yml", name);
+            "Command %s need register in plugin.yml", name);
     pluginCmd.setExecutor(commandHandler);
     pluginCmd.setAliases(command.getAliases())
-        .setDescription(command.getDescription());
+            .setDescription(command.getDescription());
 
     pluginCmd.setTabCompleter(tabHandler);
     return command;
@@ -104,13 +104,36 @@ public final class CommandController {
   @NotNull
   public Command addCommand(@NotNull Command command) {
     if (command.getParent() == null) {
-      return registerPluginCommand(command);
+      return registerPluginCommand(command, defaultCommandHandler);
     }
     Preconditions.checkState(command.getParent().getParent() == null,
-        "Not support child command registered as root command.");
+            "Not support child command registered as root command.");
 
     return addSubCommand(command.getParent(), command);
   }
+
+  /**
+   * Registers the command to controller. If command is root command ({@code command.getParent() ==
+   * null}), the command will be also registered as Bukkit command.
+   *
+   * <p><b>Notes:</b> If {@code command} is registered as child command, it will not be registered
+   * as root command.
+   *
+   * @param command The command to register
+   * @param commandHandler The custom command handler
+   * @return The command has registered
+   */
+  @NotNull
+  public Command addCommand(@NotNull Command command, @NotNull CommandHandler commandHandler) {
+    if (command.getParent() == null) {
+      return registerPluginCommand(command, commandHandler);
+    }
+    Preconditions.checkState(command.getParent().getParent() == null,
+            "Not support child command registered as root command.");
+
+    return addSubCommand(command.getParent(), command);
+  }
+
 
   /**
    * Returns the list of all command, include root commands.
@@ -119,12 +142,12 @@ public final class CommandController {
    */
   @NotNull
   public List<Command> getAllCommands() {
-    List<Command> commands = new ArrayList<>(rootCommands.values());
-    commands.addAll(this.commands.values()
-        .stream()
-        .flatMap(Collection::stream)
-        .collect(Collectors.toList()));
-    return commands;
+    List<Command> commandList = new ArrayList<>(rootCommands.values());
+    commandList.addAll(this.commands.values()
+            .stream()
+            .flatMap(Collection::stream)
+            .collect(Collectors.toList()));
+    return commandList;
   }
 
   /**
