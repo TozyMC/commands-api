@@ -40,14 +40,14 @@ public class TabHandler implements TabCompleter {
       List<String> completer = executeTabComplete(root, sender, args);
       if (completer.isEmpty() && args.length == 1) {
         return StringUtil
-            .copyPartialMatches(args[0], getChildCommandName(root), new ArrayList<>());
+            .copyPartialMatches(args[0], getChildCommandNames(root), new ArrayList<>());
       }
       return completer;
     }
 
     if (args.length == 1) {
       return StringUtil
-          .copyPartialMatches(args[0], getChildCommandName(root), new ArrayList<>());
+          .copyPartialMatches(args[0], getChildCommandNames(root), new ArrayList<>());
     }
 
     Optional<Command> commandOpt = controller.getCommand(root, args[0]);
@@ -70,8 +70,12 @@ public class TabHandler implements TabCompleter {
     return command.getPermission().has(player) ? command.onTab(player, params) : TabResult.empty();
   }
 
-  private Iterable<String> getChildCommandName(Command root) {
-    return controller.getCommands().get(root).stream().map(Command::getName)
+  private Iterable<String> getChildCommandNames(Command root) {
+    List<Command> children = controller.getCommands().get(root);
+    if (children == null) {
+      return new ArrayList<>();
+    }
+    return children.stream().map(Command::getName)
         .collect(Collectors.toList());
   }
 }
