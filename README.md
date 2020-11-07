@@ -16,7 +16,7 @@
   <h1>commands-api</h1>
   <p><i>Command libraries for spigot plugin</i></p>
   <a href="https://bit.ly/31lxtLJ"><img alt="Bintray" src="https://img.shields.io/bintray/v/tozymc/public/commands-api?style=flat-square&logo=jfrog-bintray"></a>
-  <a href="https://www.javadoc.io/doc/xyz.tozymc.spigot/commands-api/"><img alt="Javadoc" src="https://img.shields.io/badge/javadoc-1.0-brightgreen.svg?style=flat-square"></a>
+  <a href="https://www.javadoc.io/doc/xyz.tozymc.spigot/commands-api/"><img alt="Javadoc" src="https://img.shields.io/badge/javadoc-1.1-brightgreen.svg?style=flat-square"></a>
   <a href="https://git.io/JTBho"><img alt="GitHub release" src="https://img.shields.io/github/v/release/TozyMC/commands-api?style=flat-square"></a>
   <a href="https://git.io/JTRUf"><img alt="GitHub issues" src="https://img.shields.io/github/issues/TozyMC/commands-api?style=flat-square"></a>
   <a href="https://git.io/JTBhQ"><img alt="MIT License" src="https://img.shields.io/github/license/TozyMC/commands-api?style=flat-square"></a>
@@ -66,7 +66,7 @@ Add this section inside `<dependencies>` tag in your `pom.xml`.
 <dependency>
   <groupId>xyz.tozymc.spigot</groupId>
   <artifactId>commands-api</artifactId>
-  <version>1.0</version>
+  <version>1.1</version>
 </dependency>
 ```
 
@@ -80,7 +80,7 @@ repositories {
 }
 
 dependencies {
-    compile 'xyz.tozymc.spigot.api:commands-api:1.0'
+    compile 'xyz.tozymc.spigot.api:commands-api:1.1'
 }
 ```
 
