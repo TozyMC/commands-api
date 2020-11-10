@@ -16,7 +16,7 @@ import java.util.Optional;
 
 public class CommandHandler implements CommandExecutor {
 
-  private final CommandController controller;
+  protected final CommandController controller;
 
   public CommandHandler(CommandController controller) {
     this.controller = controller;
@@ -24,8 +24,9 @@ public class CommandHandler implements CommandExecutor {
 
   @Override
   public boolean onCommand(@NotNull CommandSender sender,
-      @NotNull org.bukkit.command.Command bukkitCmd, @NotNull String label,
-      @NotNull String[] args) {
+                           @NotNull org.bukkit.command.Command bukkitCmd,
+                           @NotNull String label,
+                           @NotNull String[] args) {
     Command root = controller.getRootCommand(bukkitCmd.getName());
     if (root == null) {
       return false;
@@ -37,12 +38,12 @@ public class CommandHandler implements CommandExecutor {
 
     Optional<Command> commandOpt = controller.getCommand(root, args[0]);
     return commandOpt
-        .map(command -> execute(command, sender, controller.deleteFirstArg(args)))
-        .orElseGet(() -> execute(root, sender, args));
+            .map(command -> execute(command, sender, controller.deleteFirstArg(args)))
+            .orElseGet(() -> execute(root, sender, args));
 
   }
 
-  private boolean execute(Command command, CommandSender sender, String[] params) {
+  protected boolean execute(Command command, CommandSender sender, String[] params) {
     if (sender instanceof ConsoleCommandSender) {
       CommandResult result = command.onConsoleCommand(((ConsoleCommandSender) sender), params);
       return handleResult(command, result, sender);
@@ -56,37 +57,50 @@ public class CommandHandler implements CommandExecutor {
     return handleResult(command, result, sender);
   }
 
-  private boolean handleResult(Command command, @NotNull CommandResult result,
-      CommandSender sender) {
+  protected boolean handleResult(Command command, @NotNull CommandResult result,
+                                 CommandSender sender) {
     String[] params = result.getParams();
     switch (result.getType()) {
       case FAILURE:
       case SUCCESS:
-        if (Arrays.isEmpty(params)) {
-          break;
-        }
-        sender.sendMessage(Colors.color(params));
+        sendSuccessMessage(sender, params);
         break;
       case WRONG_SYNTAX:
-        sender.sendMessage(CommonMessage.getSyntaxUsage(command));
+        sendWrongSyntaxMessage(sender, CommonMessage.getSyntaxUsage(command));
         break;
       case NO_PERMISSION:
-        if (Arrays.isEmpty(params) || params.length > 1) {
-          sender.sendMessage(CommonMessage.getNoPermissions());
-          break;
-        }
-        sender.sendMessage(CommonMessage.getNoPermission(params[0]));
+        sendNoPermissionMessage(sender, params);
         break;
+      default: break;
     }
     return result.getType().asBoolean();
   }
 
-  private CommandResult executePlayerCommand(@NotNull Command command, CommandSender sender,
-      String[] params) {
+  protected CommandResult executePlayerCommand(@NotNull Command command, CommandSender sender,
+                                               String[] params) {
     Player player = ((Player) sender);
     if (command.getPermission().has(player)) {
       return command.onCommand(player, params);
     }
     return CommandResult.NO_PERMISSIONS;
   }
+
+  private void sendSuccessMessage(CommandSender sender, String[] params) {
+    if (!Arrays.isEmpty(params)) {
+      sender.sendMessage(Colors.color(params));
+    }
+  }
+
+  private void sendWrongSyntaxMessage(CommandSender sender, String[] syntaxUsage) {
+    sender.sendMessage(syntaxUsage);
+  }
+
+  private void sendNoPermissionMessage(CommandSender sender, String[] params) {
+    if (Arrays.isEmpty(params) || params.length > 1) {
+      sender.sendMessage(CommonMessage.getNoPermissions());
+      return;
+    }
+    sender.sendMessage(CommonMessage.getNoPermission(params[0]));
+  }
+
 }

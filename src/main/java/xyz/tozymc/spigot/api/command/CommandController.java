@@ -38,10 +38,24 @@ public final class CommandController {
   private final Map<String, Command> rootCommands = new HashMap<>();
   private final Map<Command, List<Command>> commands = new HashMap<>();
 
-  @Contract(pure = true)
+  /**
+   * * Creates an instance of {@code CommandController} with default command handler.
+   *
+   * @param plugin The plugin instance
+   */
   public CommandController(@NotNull JavaPlugin plugin) {
+    this(plugin, null);
+  }
+
+  /**
+   * Creates an instance of {@code CommandController} with custom command handler.
+   *
+   * @param plugin         The plugin instance
+   * @param commandHandler The custom command handler
+   */
+  public CommandController(@NotNull JavaPlugin plugin, @Nullable CommandHandler commandHandler) {
     this.plugin = plugin;
-    this.commandHandler = new CommandHandler(this);
+    this.commandHandler = commandHandler == null ? new CommandHandler(this) : commandHandler;
     this.tabHandler = new TabHandler(this);
   }
 
@@ -119,12 +133,12 @@ public final class CommandController {
    */
   @NotNull
   public List<Command> getAllCommands() {
-    List<Command> commands = new ArrayList<>(rootCommands.values());
-    commands.addAll(this.commands.values()
+    List<Command> commandList = new ArrayList<>(rootCommands.values());
+    commandList.addAll(this.commands.values()
         .stream()
         .flatMap(Collection::stream)
         .collect(Collectors.toList()));
-    return commands;
+    return commandList;
   }
 
   /**
