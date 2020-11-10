@@ -19,8 +19,7 @@ public final class CommonMessage {
   private static String[] notPlayer = {"&cYou must be player to execute this command!"};
   private static String[] syntaxUsage = {"&cUsage: &f{syntax} &7- {description}"};
 
-  @Contract(pure = true)
-  private CommonMessage() {
+  static {
     color(noPermissions);
     color(noPermission);
     color(notConsole);
