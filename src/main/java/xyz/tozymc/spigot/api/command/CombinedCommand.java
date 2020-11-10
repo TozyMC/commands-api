@@ -1,12 +1,12 @@
 package xyz.tozymc.spigot.api.command;
 
-import xyz.tozymc.spigot.api.command.result.CommandResult;
-import xyz.tozymc.spigot.api.command.result.TabResult;
 import org.bukkit.command.CommandSender;
 import org.bukkit.command.ConsoleCommandSender;
 import org.bukkit.entity.Player;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
+import xyz.tozymc.spigot.api.command.result.CommandResult;
+import xyz.tozymc.spigot.api.command.result.TabResult;
 
 import java.util.List;
 

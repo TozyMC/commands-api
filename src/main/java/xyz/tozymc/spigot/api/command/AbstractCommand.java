@@ -1,8 +1,8 @@
 package xyz.tozymc.spigot.api.command;
 
-import xyz.tozymc.spigot.api.util.Lists;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
+import xyz.tozymc.spigot.api.util.Lists;
 
 import java.util.ArrayList;
 import java.util.List;

@@ -1,6 +1,5 @@
 package xyz.tozymc.spigot.api.util.bukkit.permission;
 
-import xyz.tozymc.spigot.api.util.Arrays;
 import org.bukkit.command.CommandSender;
 import org.bukkit.command.ConsoleCommandSender;
 import org.bukkit.entity.Entity;
@@ -8,6 +7,7 @@ import org.bukkit.entity.Player;
 import org.bukkit.permissions.Permissible;
 import org.jetbrains.annotations.Contract;
 import org.jetbrains.annotations.NotNull;
+import xyz.tozymc.spigot.api.util.Arrays;
 
 import java.util.StringJoiner;
 
@@ -33,7 +33,8 @@ public class PermissionWrapper {
    * @param permission The child permission
    * @return The wrapper of permission
    */
-  public static @NotNull PermissionWrapper of(@NotNull PermissionWrapper parent,
+  public static @NotNull
+  PermissionWrapper of(@NotNull PermissionWrapper parent,
       @NotNull String permission) {
     return of(parent.permission, permission);
   }
@@ -47,7 +48,8 @@ public class PermissionWrapper {
    * @param nodes An array of permission node
    * @return The wrapper of permission
    */
-  public static @NotNull PermissionWrapper of(@NotNull String... nodes) {
+  public static @NotNull
+  PermissionWrapper of(@NotNull String... nodes) {
     StringJoiner joiner = new StringJoiner(".");
     return of(Arrays.joinToString(joiner, nodes));
   }
@@ -59,7 +61,8 @@ public class PermissionWrapper {
    * @return The wrapper of permission
    */
   @Contract("_ -> new")
-  public static @NotNull PermissionWrapper of(@NotNull String permission) {
+  public static @NotNull
+  PermissionWrapper of(@NotNull String permission) {
     return new PermissionWrapper(permission);
   }
 

@@ -1,16 +1,16 @@
 package xyz.tozymc.spigot.api.command.handler;
 
+import org.bukkit.command.CommandExecutor;
+import org.bukkit.command.CommandSender;
+import org.bukkit.command.ConsoleCommandSender;
+import org.bukkit.entity.Player;
+import org.jetbrains.annotations.NotNull;
 import xyz.tozymc.spigot.api.command.Command;
 import xyz.tozymc.spigot.api.command.CommandController;
 import xyz.tozymc.spigot.api.command.result.CommandResult;
 import xyz.tozymc.spigot.api.command.util.CommonMessage;
 import xyz.tozymc.spigot.api.util.Arrays;
 import xyz.tozymc.spigot.api.util.bukkit.Colors;
-import org.bukkit.command.CommandExecutor;
-import org.bukkit.command.CommandSender;
-import org.bukkit.command.ConsoleCommandSender;
-import org.bukkit.entity.Player;
-import org.jetbrains.annotations.NotNull;
 
 import java.util.Optional;
 
@@ -24,9 +24,9 @@ public class CommandHandler implements CommandExecutor {
 
   @Override
   public boolean onCommand(@NotNull CommandSender sender,
-                           @NotNull org.bukkit.command.Command bukkitCmd,
-                           @NotNull String label,
-                           @NotNull String[] args) {
+      @NotNull org.bukkit.command.Command bukkitCmd,
+      @NotNull String label,
+      @NotNull String[] args) {
     Command root = controller.getRootCommand(bukkitCmd.getName());
     if (root == null) {
       return false;
@@ -38,8 +38,8 @@ public class CommandHandler implements CommandExecutor {
 
     Optional<Command> commandOpt = controller.getCommand(root, args[0]);
     return commandOpt
-            .map(command -> execute(command, sender, controller.deleteFirstArg(args)))
-            .orElseGet(() -> execute(root, sender, args));
+        .map(command -> execute(command, sender, controller.deleteFirstArg(args)))
+        .orElseGet(() -> execute(root, sender, args));
 
   }
 
@@ -58,26 +58,27 @@ public class CommandHandler implements CommandExecutor {
   }
 
   protected boolean handleResult(Command command, @NotNull CommandResult result,
-                                 CommandSender sender) {
+      CommandSender sender) {
     String[] params = result.getParams();
     switch (result.getType()) {
       case FAILURE:
       case SUCCESS:
-        sendSuccessMessage(sender, params);
+        sendParamsMessage(sender, params);
         break;
       case WRONG_SYNTAX:
-        sendWrongSyntaxMessage(sender, CommonMessage.getSyntaxUsage(command));
+        sendWrongSyntaxMessage(sender, command);
         break;
       case NO_PERMISSION:
         sendNoPermissionMessage(sender, params);
         break;
-      default: break;
+      default:
+        break;
     }
     return result.getType().asBoolean();
   }
 
   protected CommandResult executePlayerCommand(@NotNull Command command, CommandSender sender,
-                                               String[] params) {
+      String[] params) {
     Player player = ((Player) sender);
     if (command.getPermission().has(player)) {
       return command.onCommand(player, params);
@@ -85,14 +86,14 @@ public class CommandHandler implements CommandExecutor {
     return CommandResult.NO_PERMISSIONS;
   }
 
-  private void sendSuccessMessage(CommandSender sender, String[] params) {
+  private void sendParamsMessage(CommandSender sender, String[] params) {
     if (!Arrays.isEmpty(params)) {
       sender.sendMessage(Colors.color(params));
     }
   }
 
-  private void sendWrongSyntaxMessage(CommandSender sender, String[] syntaxUsage) {
-    sender.sendMessage(syntaxUsage);
+  private void sendWrongSyntaxMessage(CommandSender sender, Command command) {
+    sender.sendMessage(CommonMessage.getSyntaxUsage(command));
   }
 
   private void sendNoPermissionMessage(CommandSender sender, String[] params) {
