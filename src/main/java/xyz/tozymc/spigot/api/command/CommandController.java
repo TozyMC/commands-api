@@ -181,6 +181,33 @@ public final class CommandController {
     return plCmd;
   }
 
+  public void removeCommand(@NotNull Command command) {
+    if (command.getRoot() != null) {
+      Preconditions.checkState(commands.get(command.getRoot()).remove(command),
+          "Child command with name `%s` is not registered in controller.", command.getName());
+      return;
+    }
+    Preconditions.checkState(unregisterPluginCommand(command),
+        "Command with name `%s` is not registered in controller.", command.getName());
+    removeAllChildrenCommand(command);
+  }
+
+  private boolean unregisterPluginCommand(@NotNull Command command) {
+    String name = command.getName();
+    PluginCommand plCmd = bukkitCommands.getOrDefault(name, null);
+    if (plCmd == null) {
+      return false;
+    }
+
+    bukkitCommands.remove(name);
+    rootCommands.remove(name);
+    return plCmd.unregister(commandMap);
+  }
+
+  private void removeAllChildrenCommand(Command command) {
+    commands.remove(command);
+  }
+
   /**
    * Gets a prefix which is prepended to the command with a ':' one or more times to.
    *
