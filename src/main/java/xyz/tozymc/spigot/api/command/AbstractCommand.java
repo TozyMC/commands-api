@@ -18,53 +18,53 @@ import java.util.List;
  */
 public abstract class AbstractCommand implements Command {
 
-  protected final Command parent;
+  protected final Command root;
   protected final String name;
   private final List<String> aliases;
 
   /**
-   * A command with full specific {@code parent}, {@code name}, {@code aliases}.
+   * A command with full specific {@code root}, {@code name}, {@code aliases}.
    *
-   * <p>If {@code parent} is null, this command will be parent which registered as bukkit
+   * <p>If {@code root} is null, this command will be parent which registered as bukkit
    * command.</p>
    *
-   * @param parent  Parent of this command
+   * @param root    Root of this command
    * @param name    Name of this command
    * @param aliases List of aliases
    */
-  public AbstractCommand(@Nullable Command parent, @NotNull String name,
+  public AbstractCommand(@Nullable Command root, @NotNull String name,
       @NotNull List<String> aliases) {
-    this.parent = parent;
+    this.root = root;
     this.name = name;
     this.aliases = Lists.addAll(aliases, name);
   }
 
   /**
-   * A command with full specific {@code parent}, {@code name}, {@code aliases}.
+   * A command with full specific {@code root}, {@code name}, {@code aliases}.
    *
-   * @param parent  Parent of this command
+   * @param root    Parent of this command
    * @param name    Name of this command
    * @param aliases Array of aliases
    * @see #AbstractCommand(Command, String, List)
    */
-  public AbstractCommand(@Nullable Command parent, @NotNull String name,
+  public AbstractCommand(@Nullable Command root, @NotNull String name,
       @NotNull String... aliases) {
-    this(parent, name, Lists.newArrayList(aliases));
+    this(root, name, Lists.newArrayList(aliases));
   }
 
   /**
    * A command without the specified {@code aliases}.
    *
-   * @param parent Parent of this command
-   * @param name   Name of this command
+   * @param root Parent of this command
+   * @param name Name of this command
    * @see #AbstractCommand(Command, String, List)
    */
-  public AbstractCommand(@NotNull Command parent, @NotNull String name) {
-    this(parent, name, new ArrayList<>());
+  public AbstractCommand(@NotNull Command root, @NotNull String name) {
+    this(root, name, new ArrayList<>());
   }
 
   /**
-   * Defaults {@code parent} to null, create a parent-command instance without {@code aliases}.
+   * Defaults {@code root} to null, create a parent-command instance without {@code aliases}.
    *
    * @param name Name of this command
    */
@@ -73,7 +73,7 @@ public abstract class AbstractCommand implements Command {
   }
 
   /**
-   * Defaults {@code parent} to null, create a parent-command instance.
+   * Defaults {@code root} to null, create a parent-command instance.
    *
    * @param name    Name of this command
    * @param aliases Array of aliases
@@ -83,7 +83,7 @@ public abstract class AbstractCommand implements Command {
   }
 
   /**
-   * Defaults {@code parent} to null, create a parent-command instance.
+   * Defaults {@code root} to null, create a parent-command instance.
    *
    * @param name    Name of this command
    * @param aliases List of aliases
@@ -92,18 +92,36 @@ public abstract class AbstractCommand implements Command {
     this(null, name, aliases);
   }
 
+  /**
+   * {@inheritDoc}
+   */
   @Override
   public @Nullable
   Command getParent() {
-    return parent;
+    return getRoot();
   }
 
+  /**
+   * {@inheritDoc}
+   */
+  @Nullable
+  @Override
+  public Command getRoot() {
+    return root;
+  }
+
+  /**
+   * {@inheritDoc}
+   */
   @Override
   public @NotNull
   String getName() {
     return name;
   }
 
+  /**
+   * {@inheritDoc}
+   */
   @Override
   public @NotNull
   List<String> getAliases() {

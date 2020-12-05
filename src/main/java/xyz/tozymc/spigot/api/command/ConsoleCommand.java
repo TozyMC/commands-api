@@ -20,18 +20,18 @@ import java.util.List;
  */
 public abstract class ConsoleCommand extends AbstractCommand {
 
-  public ConsoleCommand(@Nullable Command parent, @NotNull String name,
+  public ConsoleCommand(@Nullable Command root, @NotNull String name,
       @NotNull List<String> aliases) {
-    super(parent, name, aliases);
+    super(root, name, aliases);
   }
 
-  public ConsoleCommand(@Nullable Command parent, @NotNull String name,
+  public ConsoleCommand(@Nullable Command root, @NotNull String name,
       @NotNull String... aliases) {
-    super(parent, name, aliases);
+    super(root, name, aliases);
   }
 
-  public ConsoleCommand(@NotNull Command parent, @NotNull String name) {
-    super(parent, name);
+  public ConsoleCommand(@NotNull Command root, @NotNull String name) {
+    super(root, name);
   }
 
   public ConsoleCommand(@NotNull String name) {

@@ -23,18 +23,18 @@ import java.util.List;
  */
 public abstract class CombinedCommand extends AbstractCommand {
 
-  public CombinedCommand(@Nullable Command parent, @NotNull String name,
+  public CombinedCommand(@Nullable Command root, @NotNull String name,
       @NotNull List<String> aliases) {
-    super(parent, name, aliases);
+    super(root, name, aliases);
   }
 
-  public CombinedCommand(@Nullable Command parent, @NotNull String name,
+  public CombinedCommand(@Nullable Command root, @NotNull String name,
       @NotNull String... aliases) {
-    super(parent, name, aliases);
+    super(root, name, aliases);
   }
 
-  public CombinedCommand(@NotNull Command parent, @NotNull String name) {
-    super(parent, name);
+  public CombinedCommand(@NotNull Command root, @NotNull String name) {
+    super(root, name);
   }
 
   public CombinedCommand(@NotNull String name) {

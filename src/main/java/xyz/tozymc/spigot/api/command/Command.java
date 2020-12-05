@@ -80,9 +80,19 @@ public interface Command {
    * Returns parent {@link Command} of this command.
    *
    * @return Parent of this command
+   * @deprecated Rename to {@link #getRoot()}
    */
+  @Deprecated
   @Nullable
   Command getParent();
+
+  /**
+   * Returns root {@link Command} of this command.
+   *
+   * @return Root of this command
+   */
+  @Nullable
+  Command getRoot();
 
   /**
    * Returns the name of this command.

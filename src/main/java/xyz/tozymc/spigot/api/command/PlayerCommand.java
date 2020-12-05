@@ -19,18 +19,18 @@ import java.util.List;
  */
 public abstract class PlayerCommand extends AbstractCommand {
 
-  public PlayerCommand(@Nullable Command parent, @NotNull String name,
+  public PlayerCommand(@Nullable Command root, @NotNull String name,
       @NotNull List<String> aliases) {
-    super(parent, name, aliases);
+    super(root, name, aliases);
   }
 
-  public PlayerCommand(@Nullable Command parent, @NotNull String name,
+  public PlayerCommand(@Nullable Command root, @NotNull String name,
       @NotNull String... aliases) {
-    super(parent, name, aliases);
+    super(root, name, aliases);
   }
 
-  public PlayerCommand(@NotNull Command parent, @NotNull String name) {
-    super(parent, name);
+  public PlayerCommand(@NotNull Command root, @NotNull String name) {
+    super(root, name);
   }
 
   public PlayerCommand(@NotNull String name) {
