@@ -2,12 +2,14 @@ package xyz.tozymc.spigot.api.command;
 
 import com.google.common.base.Preconditions;
 import org.bukkit.command.PluginCommand;
+import org.bukkit.command.SimpleCommandMap;
 import org.bukkit.plugin.java.JavaPlugin;
 import org.jetbrains.annotations.Contract;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import xyz.tozymc.spigot.api.command.handler.CommandHandler;
 import xyz.tozymc.spigot.api.command.handler.TabHandler;
+import xyz.tozymc.spigot.api.command.util.Utils;
 import xyz.tozymc.spigot.api.util.Arrays;
 
 import java.util.ArrayList;
@@ -35,28 +37,62 @@ public final class CommandController {
   private final JavaPlugin plugin;
   private final CommandHandler commandHandler;
   private final TabHandler tabHandler;
+  private final SimpleCommandMap commandMap;
+  private final String fallbackPrefix;
+  private final Map<String, PluginCommand> bukkitCommands = new HashMap<>();
   private final Map<String, Command> rootCommands = new HashMap<>();
   private final Map<Command, List<Command>> commands = new HashMap<>();
 
   /**
-   * * Creates an instance of {@code CommandController} with default command handler.
+   * Creates an instance of {@code CommandController} with default command handler & fall back
+   * prefix.
    *
    * @param plugin The plugin instance
    */
   public CommandController(@NotNull JavaPlugin plugin) {
-    this(plugin, null);
+    this(plugin, (CommandHandler) null);
   }
 
   /**
-   * Creates an instance of {@code CommandController} with custom command handler.
+   * Creates an instance of {@code CommandController} with default command handler & custom fall
+   * back prefix.
+   *
+   * @param plugin         The plugin instance
+   * @param fallbackPrefix A prefix which is prepended to the command with a ':' one or more times
+   *                       to
+   */
+  public CommandController(@NotNull JavaPlugin plugin, @NotNull String fallbackPrefix) {
+    this(plugin, null, fallbackPrefix);
+  }
+
+
+  /**
+   * Creates an instance of {@code CommandController} with custom command handler & default fall
+   * back prefix.
    *
    * @param plugin         The plugin instance
    * @param commandHandler The custom command handler
    */
   public CommandController(@NotNull JavaPlugin plugin, @Nullable CommandHandler commandHandler) {
+    this(plugin, commandHandler, plugin.getDescription().getName());
+  }
+
+  /**
+   * Creates an instance of {@code CommandController} with custom command handler & fall back
+   * prefix.
+   *
+   * @param plugin         The plugin instance
+   * @param commandHandler The custom command handler
+   * @param fallbackPrefix A prefix which is prepended to the command with a ':' one or more times
+   *                       to
+   */
+  public CommandController(@NotNull JavaPlugin plugin, @Nullable CommandHandler commandHandler,
+      @NotNull String fallbackPrefix) {
     this.plugin = plugin;
     this.commandHandler = commandHandler == null ? new CommandHandler(this) : commandHandler;
     this.tabHandler = new TabHandler(this);
+    this.fallbackPrefix = fallbackPrefix;
+    this.commandMap = Utils.getCommandMap(plugin.getServer());
   }
 
   @NotNull
@@ -87,18 +123,14 @@ public final class CommandController {
   private Command registerPluginCommand(@NotNull Command command) {
     String name = command.getName();
     rootCommands.put(name, command);
-    PluginCommand pluginCmd = Preconditions.checkNotNull(plugin.getCommand(name),
-        "Command %s need register in plugin.yml", name);
-    pluginCmd.setExecutor(commandHandler);
-    pluginCmd.setAliases(command.getAliases())
-        .setDescription(command.getDescription());
 
-    pluginCmd.setTabCompleter(tabHandler);
+    PluginCommand plCmd = addPluginCommand(command);
+    commandMap.register(name, fallbackPrefix, plCmd);
     return command;
   }
 
   @NotNull
-  private Command addSubCommand(@NotNull Command parent, @NotNull Command child) {
+  private Command addChildCommand(@NotNull Command parent, @NotNull Command child) {
     List<Command> subCommands = commands.getOrDefault(parent, new ArrayList<>());
     subCommands.add(child);
     commands.put(parent, subCommands);
@@ -117,13 +149,47 @@ public final class CommandController {
    */
   @NotNull
   public Command addCommand(@NotNull Command command) {
-    if (command.getParent() == null) {
+    if (command.getRoot() == null) {
       return registerPluginCommand(command);
     }
-    Preconditions.checkState(command.getParent().getParent() == null,
+    Preconditions.checkState(command.getRoot().getRoot() == null,
         "Not support child command registered as root command.");
 
-    return addSubCommand(command.getParent(), command);
+    return addChildCommand(command.getRoot(), command);
+  }
+
+  @NotNull
+  private PluginCommand asPluginCommand(@NotNull Command command) {
+    PluginCommand plCmd = Utils.newPluginCommand(command.getName(), plugin);
+
+    Preconditions.checkNotNull(plCmd);
+
+    plCmd.setDescription(command.getDescription());
+    plCmd.setUsage(command.getSyntax());
+    plCmd.setAliases(command.getAliases());
+
+    plCmd.setExecutor(commandHandler);
+    plCmd.setTabCompleter(tabHandler);
+
+    return plCmd;
+  }
+
+  @NotNull
+  private PluginCommand addPluginCommand(@NotNull Command command) {
+    PluginCommand plCmd = asPluginCommand(command);
+    bukkitCommands.put(command.getName(), plCmd);
+    return plCmd;
+  }
+
+  /**
+   * Gets a prefix which is prepended to the command with a ':' one or more times to.
+   *
+   * @return The fall back prefix
+   */
+  @Contract(pure = true)
+  @NotNull
+  public String getFallbackPrefix() {
+    return fallbackPrefix;
   }
 
   /**
@@ -150,5 +216,16 @@ public final class CommandController {
   @NotNull
   public Map<Command, List<Command>> getCommands() {
     return commands;
+  }
+
+  /**
+   * Gets the map that all root commands is converted to bukkit's plugin command.
+   *
+   * @return The map of bukkit's plugin command
+   */
+  @Contract(pure = true)
+  @NotNull
+  public SimpleCommandMap getCommandMap() {
+    return commandMap;
   }
 }
