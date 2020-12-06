@@ -1,7 +1,10 @@
 package xyz.tozymc.spigot.api.command;
 
+import com.google.common.base.Preconditions;
+import org.bukkit.command.PluginCommand;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
+import xyz.tozymc.spigot.api.command.util.Reflections;
 import xyz.tozymc.spigot.api.util.Lists;
 
 import java.util.ArrayList;
@@ -90,6 +93,22 @@ public abstract class AbstractCommand implements Command {
    */
   public AbstractCommand(@NotNull String name, @NotNull List<String> aliases) {
     this(null, name, aliases);
+  }
+
+  @NotNull
+  public static PluginCommand asPluginCommandCopy(@NotNull Command command,
+      @NotNull CommandController controller) {
+    PluginCommand plCmd = Reflections.newPluginCommand(command.getName(), controller.getPlugin());
+    Preconditions.checkNotNull(plCmd);
+
+    plCmd.setDescription(command.getDescription());
+    plCmd.setUsage(command.getSyntax());
+    plCmd.setAliases(command.getAliases());
+
+    plCmd.setExecutor(controller.getCommandHandler());
+    plCmd.setTabCompleter(controller.getTabHandler());
+
+    return plCmd;
   }
 
   /**
