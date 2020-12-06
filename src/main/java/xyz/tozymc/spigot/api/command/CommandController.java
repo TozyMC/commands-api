@@ -1,15 +1,14 @@
 package xyz.tozymc.spigot.api.command;
 
 import com.google.common.base.Preconditions;
-import org.bukkit.command.PluginCommand;
-import org.bukkit.command.SimpleCommandMap;
+import org.bukkit.plugin.Plugin;
 import org.bukkit.plugin.java.JavaPlugin;
 import org.jetbrains.annotations.Contract;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import xyz.tozymc.spigot.api.command.handler.CommandHandler;
 import xyz.tozymc.spigot.api.command.handler.TabHandler;
-import xyz.tozymc.spigot.api.command.util.Utils;
+import xyz.tozymc.spigot.api.command.wrapper.SimpleCommandMapWrapper;
 import xyz.tozymc.spigot.api.util.Arrays;
 
 import java.util.ArrayList;
@@ -37,11 +36,10 @@ public final class CommandController {
   private final JavaPlugin plugin;
   private final CommandHandler commandHandler;
   private final TabHandler tabHandler;
-  private final SimpleCommandMap commandMap;
   private final String fallbackPrefix;
-  private final Map<String, PluginCommand> bukkitCommands = new HashMap<>();
   private final Map<String, Command> rootCommands = new HashMap<>();
   private final Map<Command, List<Command>> commands = new HashMap<>();
+  private final SimpleCommandMapWrapper commandMapWrapper = new SimpleCommandMapWrapper(this);
 
   /**
    * Creates an instance of {@code CommandController} with default command handler & fall back
@@ -92,7 +90,83 @@ public final class CommandController {
     this.commandHandler = commandHandler == null ? new CommandHandler(this) : commandHandler;
     this.tabHandler = new TabHandler(this);
     this.fallbackPrefix = fallbackPrefix;
-    this.commandMap = Utils.getCommandMap(plugin.getServer());
+  }
+
+  /**
+   * Registers the command to controller. If command is root command ({@code command.getParent() ==
+   * null}), the command will be also registered as Bukkit command.
+   *
+   * <p><b>Notes:</b> If {@code command} is registered as child command, it will not be registered
+   * as root command.
+   *
+   * @param command The command to register
+   * @return The command has registered
+   * @throws IllegalStateException If command is registered or child command is root command
+   */
+  @NotNull
+  public Command addCommand(@NotNull Command command) {
+    if (command.getRoot() == null) {
+      Preconditions.checkState(registerPluginCommand(command),
+          "Command with name `%s:%s` is registered.", fallbackPrefix, command.getName());
+      return command;
+    }
+    Preconditions.checkState(command.getRoot().getRoot() == null,
+        "Not support child command register as root command.");
+
+    return addChildCommand(command.getRoot(), command);
+  }
+
+  private boolean registerPluginCommand(@NotNull Command command) {
+    rootCommands.put(command.getName(), command);
+    return commandMapWrapper.registerPluginCommand(command);
+  }
+
+  @NotNull
+  @Contract("_, _ -> param2")
+  private Command addChildCommand(@NotNull Command parent, @NotNull Command child) {
+    List<Command> subCommands = commands.getOrDefault(parent, new ArrayList<>());
+    subCommands.add(child);
+    commands.put(parent, subCommands);
+    return child;
+  }
+
+  /**
+   * Removes (unregisters) the command from this controller, it also unregister from Bukkit
+   * command.
+   *
+   * <p><b>Notes:</b> If {@code command} you want to remove is the root command, it will remove all
+   * children.</p>
+   *
+   * @param command The command need to remove
+   * @return The command has been removed
+   * @throws IllegalStateException If command is unregistered
+   */
+  @NotNull
+  @Contract("_ -> param1")
+  public Command removeCommand(@NotNull Command command) {
+    if (command.getRoot() != null) {
+      Preconditions.checkState(removeChildCommand(command),
+          "Child command with name `%s` is unregistered.", command.getName());
+      return command;
+    }
+    Preconditions.checkState(unregisterPluginCommand(command),
+        "Command with name `%s:%s` is unregistered.", fallbackPrefix, command.getName());
+    removeAllChildrenCommand(command);
+
+    return command;
+  }
+
+  private boolean unregisterPluginCommand(@NotNull Command command) {
+    rootCommands.remove(command.getName());
+    return commandMapWrapper.unregisterPluginCommand(command);
+  }
+
+  private boolean removeChildCommand(@NotNull Command command) {
+    return commands.get(command.getRoot()).remove(command);
+  }
+
+  private void removeAllChildrenCommand(Command root) {
+    commands.remove(root);
   }
 
   @NotNull
@@ -118,96 +192,6 @@ public final class CommandController {
     return rootCommands.getOrDefault(name, null);
   }
 
-  @NotNull
-  @Contract("_ -> param1")
-  private Command registerPluginCommand(@NotNull Command command) {
-    String name = command.getName();
-    rootCommands.put(name, command);
-
-    PluginCommand plCmd = addPluginCommand(command);
-    commandMap.register(name, fallbackPrefix, plCmd);
-    return command;
-  }
-
-  @NotNull
-  private Command addChildCommand(@NotNull Command parent, @NotNull Command child) {
-    List<Command> subCommands = commands.getOrDefault(parent, new ArrayList<>());
-    subCommands.add(child);
-    commands.put(parent, subCommands);
-    return child;
-  }
-
-  /**
-   * Registers the command to controller. If command is root command ({@code command.getParent() ==
-   * null}), the command will be also registered as Bukkit command.
-   *
-   * <p><b>Notes:</b> If {@code command} is registered as child command, it will not be registered
-   * as root command.
-   *
-   * @param command The command to register
-   * @return The command has registered
-   */
-  @NotNull
-  public Command addCommand(@NotNull Command command) {
-    if (command.getRoot() == null) {
-      return registerPluginCommand(command);
-    }
-    Preconditions.checkState(command.getRoot().getRoot() == null,
-        "Not support child command registered as root command.");
-
-    return addChildCommand(command.getRoot(), command);
-  }
-
-  @NotNull
-  private PluginCommand asPluginCommand(@NotNull Command command) {
-    PluginCommand plCmd = Utils.newPluginCommand(command.getName(), plugin);
-
-    Preconditions.checkNotNull(plCmd);
-
-    plCmd.setDescription(command.getDescription());
-    plCmd.setUsage(command.getSyntax());
-    plCmd.setAliases(command.getAliases());
-
-    plCmd.setExecutor(commandHandler);
-    plCmd.setTabCompleter(tabHandler);
-
-    return plCmd;
-  }
-
-  @NotNull
-  private PluginCommand addPluginCommand(@NotNull Command command) {
-    PluginCommand plCmd = asPluginCommand(command);
-    bukkitCommands.put(command.getName(), plCmd);
-    return plCmd;
-  }
-
-  public void removeCommand(@NotNull Command command) {
-    if (command.getRoot() != null) {
-      Preconditions.checkState(commands.get(command.getRoot()).remove(command),
-          "Child command with name `%s` is not registered in controller.", command.getName());
-      return;
-    }
-    Preconditions.checkState(unregisterPluginCommand(command),
-        "Command with name `%s` is not registered in controller.", command.getName());
-    removeAllChildrenCommand(command);
-  }
-
-  private boolean unregisterPluginCommand(@NotNull Command command) {
-    String name = command.getName();
-    PluginCommand plCmd = bukkitCommands.getOrDefault(name, null);
-    if (plCmd == null) {
-      return false;
-    }
-
-    bukkitCommands.remove(name);
-    rootCommands.remove(name);
-    return plCmd.unregister(commandMap);
-  }
-
-  private void removeAllChildrenCommand(Command command) {
-    commands.remove(command);
-  }
-
   /**
    * Gets a prefix which is prepended to the command with a ':' one or more times to.
    *
@@ -217,6 +201,36 @@ public final class CommandController {
   @NotNull
   public String getFallbackPrefix() {
     return fallbackPrefix;
+  }
+
+  /**
+   * Gets the owner of this CommandController
+   *
+   * @return Plugin that owns this command
+   */
+  @Contract(pure = true)
+  public Plugin getPlugin() {
+    return plugin;
+  }
+
+  /**
+   * Gets {@link CommandHandler} that is implemented from {@link org.bukkit.command.CommandExecutor}.
+   *
+   * @return CommandHandler of this controller
+   */
+  @Contract(pure = true)
+  public CommandHandler getCommandHandler() {
+    return commandHandler;
+  }
+
+  /**
+   * Gets {@link TabHandler} that is implemented from {@link org.bukkit.command.TabCompleter}.
+   *
+   * @return TabHandler of this controller
+   */
+  @Contract(pure = true)
+  public TabHandler getTabHandler() {
+    return tabHandler;
   }
 
   /**
@@ -243,16 +257,5 @@ public final class CommandController {
   @NotNull
   public Map<Command, List<Command>> getCommands() {
     return commands;
-  }
-
-  /**
-   * Gets the map that all root commands is converted to bukkit's plugin command.
-   *
-   * @return The map of bukkit's plugin command
-   */
-  @Contract(pure = true)
-  @NotNull
-  public SimpleCommandMap getCommandMap() {
-    return commandMap;
   }
 }
