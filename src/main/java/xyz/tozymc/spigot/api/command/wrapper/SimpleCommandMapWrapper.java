@@ -56,7 +56,7 @@ public final class SimpleCommandMapWrapper {
       }
     });
     registered.forEach(knownCommands::remove);
-    return registered.isEmpty();
+    return !registered.isEmpty();
   }
 
   public PluginCommand getPluginCommand(@NotNull Command command) {

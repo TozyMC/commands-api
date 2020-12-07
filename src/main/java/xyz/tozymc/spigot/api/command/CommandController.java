@@ -39,7 +39,7 @@ public final class CommandController {
   private final String fallbackPrefix;
   private final Map<String, Command> rootCommands = new HashMap<>();
   private final Map<Command, List<Command>> commands = new HashMap<>();
-  private final SimpleCommandMapWrapper commandMapWrapper = new SimpleCommandMapWrapper(this);
+  private final SimpleCommandMapWrapper commandMapWrapper;
 
   /**
    * Creates an instance of {@code CommandController} with default command handler & fall back
@@ -90,6 +90,7 @@ public final class CommandController {
     this.commandHandler = commandHandler == null ? new CommandHandler(this) : commandHandler;
     this.tabHandler = new TabHandler(this);
     this.fallbackPrefix = fallbackPrefix;
+    this.commandMapWrapper = new SimpleCommandMapWrapper(this);
   }
 
   /**
