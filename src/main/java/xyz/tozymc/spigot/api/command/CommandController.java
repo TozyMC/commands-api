@@ -102,17 +102,22 @@ public final class CommandController {
    *
    * @param command The command to register
    * @return The command has registered
-   * @throws IllegalStateException If command is registered or child command is root command
+   * @throws IllegalStateException If command is registered or child command is root command, and
+   *                               throws when root command is not registered.
    */
   @NotNull
   public Command addCommand(@NotNull Command command) {
     if (command.getRoot() == null) {
-      Preconditions.checkState(registerPluginCommand(command),
-          "Command with name `%s:%s` is registered.", fallbackPrefix, command.getName());
+      Preconditions.checkState(registerPluginCommand(command), "Command %s is registered.",
+          command.toString());
       return command;
     }
-    Preconditions.checkState(command.getRoot().getRoot() == null,
+    Command root = command.getRoot();
+    Preconditions.checkState(root.getRoot() == null,
         "Not support child command register as root command.");
+
+    Preconditions.checkState(rootCommands.containsKey(root.getName()),
+        "Root command %s must be registered first.", root.toString());
 
     return addChildCommand(command.getRoot(), command);
   }
@@ -146,12 +151,12 @@ public final class CommandController {
   @Contract("_ -> param1")
   public Command removeCommand(@NotNull Command command) {
     if (command.getRoot() != null) {
-      Preconditions.checkState(removeChildCommand(command),
-          "Child command with name `%s` is unregistered.", command.getName());
+      Preconditions.checkState(removeChildCommand(command), "Child command %s is unregistered.",
+          command.toString());
       return command;
     }
-    Preconditions.checkState(unregisterPluginCommand(command),
-        "Command with name `%s:%s` is unregistered.", fallbackPrefix, command.getName());
+    Preconditions.checkState(unregisterPluginCommand(command), "Command %s is unregistered.",
+        command.toString());
     removeAllChildrenCommand(command);
 
     return command;
