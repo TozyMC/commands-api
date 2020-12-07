@@ -149,7 +149,8 @@ public abstract class AbstractCommand implements Command {
 
   @Override
   public String toString() {
-    StringBuilder strBuilder = new StringBuilder("Command(");
+    StringBuilder strBuilder = new StringBuilder(getClass().getSimpleName());
+    strBuilder.append('(');
     if (root != null) {
       strBuilder.append("root=");
       strBuilder.append(root.getName());
@@ -157,7 +158,7 @@ public abstract class AbstractCommand implements Command {
     }
     strBuilder.append("name=");
     strBuilder.append(name);
-    strBuilder.append(")");
+    strBuilder.append(')');
     return strBuilder.toString();
   }
 }
