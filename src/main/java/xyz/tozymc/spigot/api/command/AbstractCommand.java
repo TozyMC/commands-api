@@ -146,4 +146,18 @@ public abstract class AbstractCommand implements Command {
   List<String> getAliases() {
     return aliases;
   }
+
+  @Override
+  public String toString() {
+    StringBuilder strBuilder = new StringBuilder("Command(");
+    if (root != null) {
+      strBuilder.append("root=");
+      strBuilder.append(root.getName());
+      strBuilder.append(',');
+    }
+    strBuilder.append("name=");
+    strBuilder.append(name);
+    strBuilder.append(")");
+    return strBuilder.toString();
+  }
 }

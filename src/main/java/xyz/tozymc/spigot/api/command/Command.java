@@ -133,4 +133,6 @@ public interface Command {
    */
   @NotNull
   List<String> getAliases();
+
+  String toString();
 }

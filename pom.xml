@@ -162,5 +162,13 @@
       <version>20.1.0</version>
       <scope>provided</scope>
     </dependency>
+
+    <!-- For testing -->
+    <dependency>
+      <groupId>org.junit.jupiter</groupId>
+      <artifactId>junit-jupiter</artifactId>
+      <version>RELEASE</version>
+      <scope>test</scope>
+    </dependency>
   </dependencies>
 </project>
