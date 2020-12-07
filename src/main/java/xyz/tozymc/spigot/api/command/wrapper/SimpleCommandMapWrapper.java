@@ -34,21 +34,29 @@ public final class SimpleCommandMapWrapper {
   }
 
   public boolean registerPluginCommand(@NotNull Command command) {
+    if (knownCommands.containsValue(getPluginCommand(command))) {
+      return false;
+    }
     PluginCommand plCmd = AbstractCommand.asPluginCommandCopy(command, controller);
     return this.register(plCmd);
   }
 
-  public boolean register(PluginCommand command) {
+  private boolean register(PluginCommand command) {
     return commandMap.register(fallbackPrefix, command);
   }
 
   public boolean unregisterPluginCommand(Command command) {
     PluginCommand plCmd = getPluginCommand(command);
-    boolean unregistered = unregister(plCmd);
-    return plCmd.unregister(commandMap) && unregistered;
+    if (!this.unregister(plCmd)) {
+      return false;
+    }
+    return plCmd.unregister(commandMap);
   }
 
-  public synchronized boolean unregister(org.bukkit.command.Command command) {
+  private synchronized boolean unregister(PluginCommand command) {
+    if (!knownCommands.containsValue(command)) {
+      return false;
+    }
     List<String> registered = new ArrayList<>();
     knownCommands.forEach((label, comm) -> {
       if (comm.equals(command)) {

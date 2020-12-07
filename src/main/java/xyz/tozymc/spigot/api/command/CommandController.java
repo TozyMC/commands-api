@@ -42,7 +42,7 @@ public final class CommandController {
   private final SimpleCommandMapWrapper commandMapWrapper;
 
   /**
-   * Creates an instance of {@code CommandController} with default command handler & fall back
+   * Creates an instance of {@code CommandController} with default command handler and fall back
    * prefix.
    *
    * @param plugin The plugin instance
@@ -52,7 +52,7 @@ public final class CommandController {
   }
 
   /**
-   * Creates an instance of {@code CommandController} with default command handler & custom fall
+   * Creates an instance of {@code CommandController} with default command handler and custom fall
    * back prefix.
    *
    * @param plugin         The plugin instance
@@ -65,7 +65,7 @@ public final class CommandController {
 
 
   /**
-   * Creates an instance of {@code CommandController} with custom command handler & default fall
+   * Creates an instance of {@code CommandController} with custom command handler and default fall
    * back prefix.
    *
    * @param plugin         The plugin instance
@@ -76,7 +76,7 @@ public final class CommandController {
   }
 
   /**
-   * Creates an instance of {@code CommandController} with custom command handler & fall back
+   * Creates an instance of {@code CommandController} with custom command handler and fall back
    * prefix.
    *
    * @param plugin         The plugin instance
