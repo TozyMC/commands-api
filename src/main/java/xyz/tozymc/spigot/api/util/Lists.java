@@ -62,6 +62,9 @@ public final class Lists {
   @NotNull
   @Contract("_, _ -> param1")
   public static <T> List<T> setAll(@NotNull List<T> list, Function<T, T> function) {
+    if (function == null) {
+      return list;
+    }
     ListIterator<T> iterator = list.listIterator();
     while (iterator.hasNext()) {
       iterator.set(function.apply(iterator.next()));

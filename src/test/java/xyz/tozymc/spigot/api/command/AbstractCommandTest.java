@@ -1,12 +1,13 @@
 package xyz.tozymc.spigot.api.command;
 
+import static org.junit.jupiter.api.Assertions.assertEquals;
 import static xyz.tozymc.spigot.api.command.result.CommandResult.SUCCESS;
 import static xyz.tozymc.spigot.api.command.result.TabResult.empty;
 import static xyz.tozymc.spigot.api.util.bukkit.permission.PermissionWrapper.of;
 
 import org.bukkit.command.CommandSender;
 import org.jetbrains.annotations.NotNull;
-import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import xyz.tozymc.spigot.api.command.result.CommandResult;
@@ -57,12 +58,18 @@ class AbstractCommandTest {
 
   @Test
   void toStringTest_root() {
-    Assertions.assertEquals("RootCommand(name=root)", rootCommand.toString());
+    assertEquals("RootCommand(name=root)", rootCommand.toString());
   }
 
   @Test
   void toStringTest_child() {
-    Assertions.assertEquals("(root=root,name=child)", childCommand.toString());
+    assertEquals("(root=root,name=child)", childCommand.toString());
+  }
+
+  @AfterEach
+  void tearDown() {
+    rootCommand = null;
+    childCommand = null;
   }
 
   private static class RootCommand extends CombinedCommand {
