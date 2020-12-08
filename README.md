@@ -14,7 +14,7 @@
 
 [release2.0]: https://github.com/TozyMC/commands-api/releases/tag/v2.0 "Release 2.0"
 
-<div style="align-content: center">
+<div align="center">
   <h1>commands-api</h1>
   <p><i>Command libraries for spigot plugin</i></p>
   <a href="https://bit.ly/31lxtLJ"><img alt="Bintray" src="https://img.shields.io/bintray/v/tozymc/public/commands-api?style=flat-square&logo=jfrog-bintray"></a>
