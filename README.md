@@ -12,11 +12,13 @@
 
 [spigot]: https://www.spigotmc.org/resources/84992/ "Spigot Resources"
 
-<div align="center">
+[release2.0]: https://github.com/TozyMC/commands-api/releases/tag/v2.0 "Release 2.0"
+
+<div style="align-content: center">
   <h1>commands-api</h1>
   <p><i>Command libraries for spigot plugin</i></p>
   <a href="https://bit.ly/31lxtLJ"><img alt="Bintray" src="https://img.shields.io/bintray/v/tozymc/public/commands-api?style=flat-square&logo=jfrog-bintray"></a>
-  <a href="https://www.javadoc.io/doc/xyz.tozymc.spigot/commands-api/"><img alt="Javadoc" src="https://img.shields.io/badge/javadoc-1.1-brightgreen.svg?style=flat-square"></a>
+  <a href="https://www.javadoc.io/doc/xyz.tozymc.spigot/commands-api/"><img alt="Javadoc" src="https://img.shields.io/badge/javadoc-2.0-brightgreen.svg?style=flat-square"></a>
   <a href="https://git.io/JTBho"><img alt="GitHub release" src="https://img.shields.io/github/v/release/TozyMC/commands-api?style=flat-square"></a>
   <a href="https://git.io/JTRUf"><img alt="GitHub issues" src="https://img.shields.io/github/issues/TozyMC/commands-api?style=flat-square"></a>
   <a href="https://git.io/JTBhQ"><img alt="MIT License" src="https://img.shields.io/github/license/TozyMC/commands-api?style=flat-square"></a>
@@ -29,7 +31,7 @@ to replace it.
 
 The *commands-api* is very easy to implement, deploy and use. It's compatible with all projects from
 small to large and any version of Spigot. Working with the root-child model, the root command
-equivalent to the spigot command and registered in `plugin.yml`. Reduce pass parameters for
+equivalent to the spigot command and registered as `PluginCommand`. Reduce pass parameters for
 simplicity, custom command results, and more.
 
 ***Notes:*** *This is a library,* ***not*** *a spigot plugin.*
@@ -43,6 +45,7 @@ simplicity, custom command results, and more.
   - [Manual](#manual)
 
 - [How to use](#how-to-use)
+- [Important Changes](#important-changes)
 - [License](#license)
 - [External Links](#external-links)
 
@@ -66,7 +69,7 @@ Add this section inside `<dependencies>` tag in your `pom.xml`.
 <dependency>
   <groupId>xyz.tozymc.spigot</groupId>
   <artifactId>commands-api</artifactId>
-  <version>1.1</version>
+  <version>2.0</version>
 </dependency>
 ```
 
@@ -80,7 +83,7 @@ repositories {
 }
 
 dependencies {
-    compile 'xyz.tozymc.spigot.api:commands-api:1.1'
+    compile 'xyz.tozymc.spigot.api:commands-api:2.0'
 }
 ```
 
@@ -103,7 +106,15 @@ If your project doesn't have any build tools, you can install it manually.
 
    ***Notes:*** *The root command must be registered first before the child.*
 
-3. Add root commands to the `plugin.yml`.
+3. Let's start server and enjoy.
+
+## Important Changes
+
+Since version [`2.0`][release2.0], you don't need to add command to `plugin.yml`. Why? The major
+feature update in version [`2.0`][release2.0] is ***dynamic command registration***. What is it?
+Simply, you can register commands anywhere and at any time. Unregistration is similar. So adding
+command to `plugin.yml`
+isn't necessary.
 
 ## License
 
