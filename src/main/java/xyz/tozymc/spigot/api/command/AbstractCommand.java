@@ -111,36 +111,24 @@ public abstract class AbstractCommand implements Command {
     return plCmd;
   }
 
-  /**
-   * {@inheritDoc}
-   */
   @Override
   public @Nullable
   Command getParent() {
     return getRoot();
   }
 
-  /**
-   * {@inheritDoc}
-   */
   @Nullable
   @Override
   public Command getRoot() {
     return root;
   }
 
-  /**
-   * {@inheritDoc}
-   */
   @Override
   public @NotNull
   String getName() {
     return name;
   }
 
-  /**
-   * {@inheritDoc}
-   */
   @Override
   public @NotNull
   List<String> getAliases() {
