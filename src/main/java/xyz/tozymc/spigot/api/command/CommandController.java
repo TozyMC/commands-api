@@ -1,6 +1,5 @@
 package xyz.tozymc.spigot.api.command;
 
-import com.google.common.base.Preconditions;
 import org.bukkit.plugin.Plugin;
 import org.bukkit.plugin.java.JavaPlugin;
 import org.jetbrains.annotations.Contract;
@@ -10,6 +9,7 @@ import xyz.tozymc.spigot.api.command.handler.CommandHandler;
 import xyz.tozymc.spigot.api.command.handler.TabHandler;
 import xyz.tozymc.spigot.api.command.wrapper.SimpleCommandMapWrapper;
 import xyz.tozymc.spigot.api.util.Arrays;
+import xyz.tozymc.spigot.api.util.Preconditions;
 
 import java.util.ArrayList;
 import java.util.Collection;
