@@ -20,6 +20,13 @@ import java.util.List;
  */
 public abstract class PlayerCommand extends AbstractCommand {
 
+  private static final CommandResult NOT_PLAYER_COMMAND_RESULT;
+
+  static {
+    NOT_PLAYER_COMMAND_RESULT = CommandResult.from(Type.FAILURE, CommonMessage.getNotPlayer());
+  }
+
+
   public PlayerCommand(@Nullable Command root, @NotNull String name,
       @NotNull List<String> aliases) {
     super(root, name, aliases);
@@ -47,6 +54,7 @@ public abstract class PlayerCommand extends AbstractCommand {
     super(name, aliases);
   }
 
+
   @NotNull
   @Override
   public abstract CommandResult onCommand(@NotNull Player player, @NotNull String[] params);
@@ -68,7 +76,7 @@ public abstract class PlayerCommand extends AbstractCommand {
   @Override
   public CommandResult onConsoleCommand(@NotNull ConsoleCommandSender console,
       @NotNull String[] params) {
-    return CommandResult.from(Type.FAILURE, CommonMessage.getNotPlayer());
+    return NOT_PLAYER_COMMAND_RESULT;
   }
 
   /**

@@ -21,6 +21,13 @@ import java.util.List;
  */
 public abstract class ConsoleCommand extends AbstractCommand {
 
+  private static final CommandResult NOT_CONSOLE_COMMAND_RESULT;
+
+  static {
+    NOT_CONSOLE_COMMAND_RESULT = CommandResult.from(Type.FAILURE, CommonMessage.getNotConsole());
+  }
+
+
   public ConsoleCommand(@Nullable Command root, @NotNull String name,
       @NotNull List<String> aliases) {
     super(root, name, aliases);
@@ -47,6 +54,7 @@ public abstract class ConsoleCommand extends AbstractCommand {
     super(name, aliases);
   }
 
+
   @NotNull
   @Override
   public abstract CommandResult onConsoleCommand(@NotNull ConsoleCommandSender console,
@@ -69,7 +77,7 @@ public abstract class ConsoleCommand extends AbstractCommand {
   @NotNull
   @Override
   public CommandResult onCommand(@NotNull Player player, @NotNull String[] params) {
-    return CommandResult.from(Type.FAILURE, CommonMessage.getNotConsole());
+    return NOT_CONSOLE_COMMAND_RESULT;
   }
 
   /**
