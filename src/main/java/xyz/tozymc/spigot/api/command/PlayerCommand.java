@@ -1,6 +1,7 @@
 package xyz.tozymc.spigot.api.command;
 
 import org.bukkit.command.ConsoleCommandSender;
+import org.bukkit.entity.Player;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import xyz.tozymc.spigot.api.command.result.CommandResult;
@@ -48,11 +49,39 @@ public abstract class PlayerCommand extends AbstractCommand {
 
   @NotNull
   @Override
+  public abstract CommandResult onCommand(@NotNull Player player, @NotNull String[] params);
+
+  @NotNull
+  @Override
+  public abstract TabResult onTab(@NotNull Player player, @NotNull String[] params);
+
+  /**
+   * Executes given command, returns the results.
+   *
+   * <p>Default implementation to prevent console from executing player commands.
+   *
+   * @param console Console sender executed command
+   * @param params  Passed command parameters
+   * @return An failure result with NotPlayer message.
+   */
+  @NotNull
+  @Override
   public CommandResult onConsoleCommand(@NotNull ConsoleCommandSender console,
       @NotNull String[] params) {
     return CommandResult.from(Type.FAILURE, CommonMessage.getNotPlayer());
   }
 
+  /**
+   * Requests a list of possible completions for a command parameters.
+   *
+   * <p>Default implementation to prevent console from performing player completions for a command
+   * parameter.
+   *
+   * @param console Console sender executed command
+   * @param params  The parameters pass to the to the command, including final partial parameter to
+   *                be completed and command label
+   * @return An empty tab result.
+   */
   @Override
   @NotNull
   public TabResult onConsoleTab(@NotNull ConsoleCommandSender console,
