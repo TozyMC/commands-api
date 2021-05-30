@@ -16,6 +16,8 @@ import java.util.List;
  */
 public final class Colors {
 
+  private Colors() {}
+
   /**
    * Translates a text using {@code &} character into a string that uses the internal {@link
    * ChatColor#COLOR_CHAR} character.

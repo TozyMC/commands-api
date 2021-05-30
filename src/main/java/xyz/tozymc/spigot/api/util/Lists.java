@@ -17,8 +17,7 @@ import java.util.function.Function;
  */
 public final class Lists {
 
-  private Lists() {
-  }
+  private Lists() {}
 
   /**
    * Creates an {@code ArrayList} instance containing the given elements.

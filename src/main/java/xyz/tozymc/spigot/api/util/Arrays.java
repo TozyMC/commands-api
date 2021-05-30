@@ -14,8 +14,7 @@ import java.util.function.IntFunction;
  */
 public final class Arrays {
 
-  private Arrays() {
-  }
+  private Arrays() {}
 
   /**
    * Joins string array with {@link StringJoiner}.

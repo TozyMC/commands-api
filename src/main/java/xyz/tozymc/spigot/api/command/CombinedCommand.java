@@ -56,6 +56,8 @@ public abstract class CombinedCommand extends AbstractCommand {
    * @param sender Sources of the command
    * @param params Passed command parameters
    * @return Command's result was executed
+   * @see #onCommand(Player, String[])
+   * @see #onConsoleCommand(ConsoleCommandSender, String[])
    */
   @NotNull
   public abstract CommandResult onCommand(@NotNull CommandSender sender, @NotNull String[] params);
@@ -68,6 +70,8 @@ public abstract class CombinedCommand extends AbstractCommand {
    *               be completed and command label
    * @return A List of possible completions for the final argument, or an empty list to default to
    * the command executor
+   * @see #onTab(Player, String[])
+   * @see #onConsoleTab(ConsoleCommandSender, String[])
    */
   @NotNull
   public abstract TabResult onTab(@NotNull CommandSender sender, @NotNull String[] params);

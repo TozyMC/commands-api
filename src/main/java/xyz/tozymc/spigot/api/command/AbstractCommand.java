@@ -1,11 +1,11 @@
 package xyz.tozymc.spigot.api.command;
 
-import com.google.common.base.Preconditions;
 import org.bukkit.command.PluginCommand;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import xyz.tozymc.spigot.api.command.util.Reflections;
 import xyz.tozymc.spigot.api.util.Lists;
+import xyz.tozymc.spigot.api.util.Preconditions;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -111,36 +111,24 @@ public abstract class AbstractCommand implements Command {
     return plCmd;
   }
 
-  /**
-   * {@inheritDoc}
-   */
   @Override
   public @Nullable
   Command getParent() {
     return getRoot();
   }
 
-  /**
-   * {@inheritDoc}
-   */
   @Nullable
   @Override
   public Command getRoot() {
     return root;
   }
 
-  /**
-   * {@inheritDoc}
-   */
   @Override
   public @NotNull
   String getName() {
     return name;
   }
 
-  /**
-   * {@inheritDoc}
-   */
   @Override
   public @NotNull
   List<String> getAliases() {

@@ -53,8 +53,7 @@ public final class Reflections {
     KNOWN_COMMANDS_FIELD = knownCommandsField;
   }
 
-  private Reflections() {
-  }
+  private Reflections() {}
 
   /**
    * Creates new {@link PluginCommand} instance.

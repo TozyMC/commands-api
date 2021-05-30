@@ -1,10 +1,10 @@
 package xyz.tozymc.spigot.api.command.util;
 
-import static xyz.tozymc.spigot.api.util.bukkit.Colors.color;
-
 import org.jetbrains.annotations.Contract;
 import xyz.tozymc.spigot.api.command.Command;
 import xyz.tozymc.spigot.api.util.Arrays;
+
+import static xyz.tozymc.spigot.api.util.bukkit.Colors.color;
 
 /**
  * Common messages use in command handler.
@@ -26,6 +26,8 @@ public final class CommonMessage {
     color(notPlayer);
     color(syntaxUsage);
   }
+
+  private CommonMessage() {}
 
   /**
    * Gets no-permission messages with unknowns permission.
