@@ -79,7 +79,7 @@ Follow this instruction if your build tool is Gradle.
 
 ```gradle
 dependencies {
-    implementation 'xyz.tozymc.spigot.api:commands-api:2.1'
+    implementation 'xyz.tozymc.spigot:commands-api:2.1'
 }
 ```
 
