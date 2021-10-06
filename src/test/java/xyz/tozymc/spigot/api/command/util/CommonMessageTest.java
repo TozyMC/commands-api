@@ -29,14 +29,14 @@ class CommonMessageTest {
 
   @Test
   void getPermissionTest_withPermission() {
-    assertArrayEquals(new String[]{"§cYou don't have permission test to do that."},
-        getNoPermission("test"));
+    assertArrayEquals(new String[]{"\u00A7cYou don't have permission test to do that."},
+        getNoPermission("test")); // "§cYou don't have permission test to do that."
   }
 
   @Test
   void getSyntaxUsageTest() {
-    assertArrayEquals(new String[]{"§cUsage: §f/test §7- Test command"},
-        getSyntaxUsage(testCommand));
+    assertArrayEquals(new String[]{"\u00A7cUsage: \u00A7f/test \u00A77- Test command"},
+        getSyntaxUsage(testCommand)); // "§cUsage: §f/test §7- Test command"
   }
 
   @AfterEach
