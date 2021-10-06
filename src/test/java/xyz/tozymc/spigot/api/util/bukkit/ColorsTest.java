@@ -4,10 +4,9 @@ import static org.junit.jupiter.api.Assertions.assertArrayEquals;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static xyz.tozymc.spigot.api.util.bukkit.Colors.color;
 
-import org.junit.jupiter.api.Test;
-
 import java.util.ArrayList;
 import java.util.List;
+import org.junit.jupiter.api.Test;
 
 class ColorsTest {
 
@@ -15,14 +14,14 @@ class ColorsTest {
   void colorTest_string() {
     String text = "&aPlayer &7joined the game!";
 
-    assertEquals("§aPlayer §7joined the game!", color(text));
+    assertEquals("\u00A7aPlayer \u00A77joined the game!", color(text)); // "§aPlayer §7joined the game!"
   }
 
   @Test
   void colorTest_array() {
     String[] array = {"&aABC", "&bHello"};
     color(array);
-    assertArrayEquals(new String[]{"§aABC", "§bHello"}, array);
+    assertArrayEquals(new String[]{"\u00A7aABC", "\u00A7bHello"}, array); // {"§aABC", "§bHello"}
   }
 
   @Test
@@ -32,6 +31,6 @@ class ColorsTest {
     list.add("&bHello");
 
     color(list);
-    assertEquals("[§aABC, §bHello]", list.toString());
+    assertEquals("[\u00A7aABC, \u00A7bHello]", list.toString()); // "[§aABC, §bHello]"
   }
 }

@@ -17,7 +17,7 @@
 <div align="center">
   <h1>commands-api</h1>
   <p><i>Command libraries for spigot plugin</i></p>
-  <a href="https://search.maven.org/artifact/xyz.tozymc.spigot/commands-api/2.1/jar"><img alt="Maven Central" src="https://img.shields.io/maven-central/v/xyz.tozymc.spigot/commands-api?label=Maven%20Central&logo=apache-maven&style=flat-square"></a>
+  <a href="https://search.maven.org/artifact/xyz.tozymc.spigot/commands-api/2.2/jar"><img alt="Maven Central" src="https://img.shields.io/maven-central/v/xyz.tozymc.spigot/commands-api?label=Maven%20Central&logo=apache-maven&style=flat-square"></a>
   <a href="https://git.io/JTBho"><img alt="GitHub release" src="https://img.shields.io/github/v/release/TozyMC/commands-api?logo=github&style=flat-square"></a>
   <a href="https://www.javadoc.io/doc/xyz.tozymc.spigot/commands-api/"><img alt="Javadoc" src="https://javadoc.io/badge2/xyz.tozymc.spigot/commands-api/javadoc.svg?style=flat-square&label=Javadoc&color=brightgreen&logo=java"></a>
   <a href="https://git.io/JTRUf"><img alt="GitHub issues" src="https://img.shields.io/github/issues/TozyMC/commands-api?style=flat-square"></a>
@@ -51,8 +51,7 @@ simplicity, custom command results, and more.
 
 ## Requirements
 
-The source code used is *java 8* and built under `jdk1.8.0_291`. Any java version lower than *java
-8* will cause an error.
+The source code used is *java 8*. Any java version lower than *java 8* will cause an error.
 
 - **Java 8** or later
 
@@ -69,7 +68,7 @@ Add this section inside `<dependencies>` tag in your `pom.xml`.
 <dependency>
   <groupId>xyz.tozymc.spigot</groupId>
   <artifactId>commands-api</artifactId>
-  <version>2.1</version>
+  <version>2.2</version>
 </dependency>
 ```
 
@@ -79,7 +78,7 @@ Follow this instruction if your build tool is Gradle.
 
 ```gradle
 dependencies {
-    implementation 'xyz.tozymc.spigot:commands-api:2.1'
+    implementation 'xyz.tozymc.spigot:commands-api:2.2'
 }
 ```
 

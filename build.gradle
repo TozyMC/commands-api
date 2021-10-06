@@ -1,123 +1,119 @@
 import java.time.Year
 
 plugins {
-    id 'java-library'
-    id 'maven-publish'
-    id 'signing'
+  id 'java-library'
+  id 'maven-publish'
+  id 'signing'
 }
 
 group 'xyz.tozymc.spigot'
-version '2.1'
+version '2.2'
 description = 'Command libraries for spigot plugin.'
 
-sourceCompatibility = '1.8'
-targetCompatibility = '1.8'
-
-java {
-    withJavadocJar()
-    withSourcesJar()
-}
-
 repositories {
-    mavenCentral()
-    maven {
-        url = 'https://hub.spigotmc.org/nexus/content/repositories/snapshots/'
-    }
+  mavenCentral()
+  maven { url = 'https://hub.spigotmc.org/nexus/content/repositories/snapshots/' }
+  maven { url = 'https://oss.sonatype.org/content/repositories/snapshots' }
+  maven { url = 'https://oss.sonatype.org/content/repositories/central' }
 }
 
 dependencies {
-    api 'org.spigotmc:spigot-api:1.16.5-R0.1-SNAPSHOT'
-    api 'org.jetbrains:annotations-java5:20.1.0'
+  compileOnlyApi 'org.spigotmc:spigot-api:1.17.1-R0.1-SNAPSHOT'
+  compileOnlyApi 'org.jetbrains:annotations-java5:22.0.0'
 
-    testImplementation 'org.junit.jupiter:junit-jupiter-api:5.7.0'
-    testRuntimeOnly 'org.junit.jupiter:junit-jupiter-engine:1.7.0'
+  testImplementation 'org.junit.jupiter:junit-jupiter-api:5.8.1'
+  testImplementation 'org.spigotmc:spigot-api:1.17.1-R0.1-SNAPSHOT'
+  testRuntimeOnly 'org.junit.jupiter:junit-jupiter-engine:5.8.1'
 }
 
-test {
-    useJUnitPlatform()
+
+def targetJavaVersion = 8
+java {
+  withSourcesJar()
+  withJavadocJar()
+
+  def javaVersion = JavaVersion.toVersion(targetJavaVersion)
+  sourceCompatibility = javaVersion
+  targetCompatibility = javaVersion
+  if (JavaVersion.current() < javaVersion) {
+    toolchain.languageVersion = JavaLanguageVersion.of(targetJavaVersion)
+  }
 }
 
-tasks.withType(JavaCompile) {
-    options.encoding = 'UTF-8'
+tasks.withType(JavaCompile).configureEach {
+  if (targetJavaVersion >= 10 || JavaVersion.current().isJava10Compatible()) {
+    options.release = targetJavaVersion
+  }
+}
+
+tasks.named('test') {
+  useJUnitPlatform()
 }
 
 javadoc {
-    source = sourceSets.main.allJava
-    if (project.hasProperty("javadocExecutable")) {
-        executable = javadocExecutable
-    }
-    options {
-        charSet 'utf-8'
-        source '1.8'
-        bottom "Copyright &#169; ${Year.now()} TozyMC. All rights reserved."
-        links << 'https://docs.oracle.com/javase/8/docs/api/'
-        links << 'https://hub.spigotmc.org/javadocs/spigot/'
-        links << 'https://javadoc.io/doc/org.jetbrains/annotations-java5/20.1.0/'
-    }
-    exclude 'xyz/tozymc/spigot/api/command/handler/**'
-    if (JavaVersion.current().isJava9Compatible()) {
-        options.addBooleanOption('html5', true)
-    }
+  source = sourceSets.main.allJava
+  if (project.hasProperty("javadocExecutable")) {
+    executable = javadocExecutable
+  }
+  options {
+    charSet 'utf-8'
+    source '1.8'
+    bottom "Copyright &#169; ${Year.now()} TozyMC. All rights reserved."
+    links << 'https://docs.oracle.com/javase/8/docs/api/'
+    links << 'https://hub.spigotmc.org/javadocs/spigot/'
+    links << 'https://javadoc.io/doc/org.jetbrains/annotations-java5/20.1.0/'
+  }
+  exclude 'xyz/tozymc/spigot/api/command/handler/**'
+  if (JavaVersion.current().isJava9Compatible()) {
+    options.addBooleanOption('html5', true)
+  }
 }
 
 publishing {
-    publications {
-        mavenJava(MavenPublication) {
-            artifactId = 'commands-api'
-            from components.java
-            convertToProvidedScope(pom)
-            pom {
-                name = 'commands-api'
-                description = project.description
-                url = 'https://github.com/TozyMC/commands-api'
-                inceptionYear = '2021'
+  publications {
+    mavenJava(MavenPublication) {
+      artifactId = 'commands-api'
+      from components.java
+      pom {
+        name = 'commands-api'
+        description = project.description
+        url = 'https://github.com/TozyMC/commands-api'
+        inceptionYear = '2021'
 
-                licenses {
-                    license {
-                        name = 'MIT License'
-                        url = 'https://github.com/TozyMC/commands-api/blob/main/LICENSE'
-                    }
-                }
-
-                scm {
-                    connection = 'scm:git:git://github.com/TozyMC/commands-api.git'
-                    developerConnection = 'scm:git:ssh://github.com:TozyMC/commands-api.git'
-                    url = 'https://github.com/TozyMC/commands-api'
-                }
-
-                developers {
-                    developer {
-                        id = 'tozymc'
-                        name = 'TozyMC'
-                        url = 'http://tozymc.xyz'
-                    }
-                }
-            }
+        licenses {
+          license {
+            name = 'MIT License'
+            url = 'https://github.com/TozyMC/commands-api/blob/main/LICENSE'
+          }
         }
-    }
-    repositories {
-        maven {
-            url = 'https://s01.oss.sonatype.org/service/local/staging/deploy/maven2/'
-            credentials {
-                username ossrhUsername
-                password ossrhPassword
-            }
-        }
-    }
-}
 
-def convertToProvidedScope(pom) {
-    pom.withXml {
-        asNode().dependencies.'*'.findAll() {
-            configurations.api.allDependencies.find { dep ->
-                dep.name == it.artifactId.text()
-            }
-        }.each() {
-            it.scope*.value = 'provided'
+        scm {
+          connection = 'scm:git:git://github.com/TozyMC/commands-api.git'
+          developerConnection = 'scm:git:ssh://github.com:TozyMC/commands-api.git'
+          url = 'https://github.com/TozyMC/commands-api'
         }
+
+        developers {
+          developer {
+            id = 'tozymc'
+            name = 'TozyMC'
+            url = 'http://tozymc.xyz'
+          }
+        }
+      }
     }
+  }
+  repositories {
+    maven {
+      url = 'https://s01.oss.sonatype.org/service/local/staging/deploy/maven2/'
+      credentials {
+        username findProperty('ossrhUsername')
+        password findProperty('ossrhPassword')
+      }
+    }
+  }
 }
 
 signing {
-    sign publishing.publications.mavenJava
+  sign publishing.publications.mavenJava
 }
