@@ -7,7 +7,7 @@ plugins {
 }
 
 group 'xyz.tozymc.spigot'
-version '2.2-dev'
+version '2.2'
 description = 'Command libraries for spigot plugin.'
 
 repositories {
@@ -107,8 +107,8 @@ publishing {
     maven {
       url = 'https://s01.oss.sonatype.org/service/local/staging/deploy/maven2/'
       credentials {
-        username ossrhUsername
-        password ossrhPassword
+        username findProperty('ossrhUsername')
+        password findProperty('ossrhPassword')
       }
     }
   }
