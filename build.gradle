@@ -10,11 +10,6 @@ group 'xyz.tozymc.spigot'
 version '2.2-dev'
 description = 'Command libraries for spigot plugin.'
 
-java {
-  withJavadocJar()
-  withSourcesJar()
-}
-
 repositories {
   mavenCentral()
   maven { url = 'https://hub.spigotmc.org/nexus/content/repositories/snapshots/' }
@@ -34,6 +29,9 @@ dependencies {
 
 def targetJavaVersion = 8
 java {
+  withSourcesJar()
+  withJavadocJar()
+
   def javaVersion = JavaVersion.toVersion(targetJavaVersion)
   sourceCompatibility = javaVersion
   targetCompatibility = javaVersion
